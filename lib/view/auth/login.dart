@@ -55,12 +55,12 @@ class _LoginState extends State<Login> {
                   bottomLeft: Radius.circular(10),
                 ),
                 color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xffeeeeee),
-                    blurRadius: 6,
-                  ),
-                ],
+                // boxShadow: [
+                //   BoxShadow(
+                //     color: Color(0xffeeeeee),
+                //     blurRadius: 6,
+                //   ),
+                // ],
               ),
               child: Form(
                 key: formState,

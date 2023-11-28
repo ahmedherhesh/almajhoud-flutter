@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/view/auth/login.dart';
+import 'package:flutter_almajhoud/view/units/create.dart';
+import 'package:flutter_almajhoud/view/units/edit.dart';
 import 'package:flutter_almajhoud/view/units/units.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +24,13 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
         primaryColor: primaryColor,
         primarySwatch: Colors.grey,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+          backgroundColor: MaterialStateColor.resolveWith(
+            (states) => primaryColor,
+          ),
+          
+        )),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: primaryColor,
         ),
@@ -35,10 +44,28 @@ class MyApp extends StatelessWidget {
       textDirection: TextDirection.rtl,
       debugShowCheckedModeBanner: false,
       title: 'Almajhoud',
-      home: const Login(),
+      initialRoute: '/login',
       getPages: [
-        GetPage(name: '/login', page: () => const Login()),
-        GetPage(name: '/units', page: () => const Units()),
+        GetPage(
+          name: '/login',
+          page: () => const Login(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/units',
+          page: () => const Units(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/unit-create',
+          page: () => const CreateUnit(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/unit-edit',
+          page: () => const EditUnit(),
+          middlewares: [],
+        ),
       ],
     );
   }

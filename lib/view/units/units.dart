@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/api.dart';
+import 'package:get/get.dart';
 
 class Units extends StatefulWidget {
   const Units({super.key});
@@ -37,7 +38,7 @@ class _UnitsState extends State<Units> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {},
+        onPressed: () => Get.toNamed('unit-create'),
         child: const Icon(
           Icons.add,
           color: Colors.white,

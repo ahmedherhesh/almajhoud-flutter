@@ -40,9 +40,9 @@ import 'package:get/get.dart';
 String validationMsgs(body) {
   String output = '';
   List msgs = jsonDecode(body);
-  msgs.forEach((element) {
-    output = output != '' ? '$output \n ${element[0]}' : element[0];
-  });
+  for (var msg in msgs) {
+    output = output != '' ? '$output \n ${msg[0]}' : msg[0];
+  }
   return output;
 }
 

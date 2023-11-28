@@ -5,18 +5,24 @@ import 'package:get/get.dart';
 
 appBar({String? title}) {
   return AppBar(
+    iconTheme: const IconThemeData(
+      color: Colors.white,
+      size: 30,
+    ),
     title: Text(
       '$title',
-      style: const TextStyle(color: Colors.white, fontSize: 30),
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 30,
+      ),
     ),
+    centerTitle: true,
     toolbarHeight: 70,
     elevation: 8,
     shadowColor: shadowColor,
     backgroundColor: primaryColor,
     actions: [
       PopupMenuButton(
-        // add icon, by default "3 dot" icon
-        // icon: Icon(Icons.book)
         iconSize: 30,
         iconColor: Colors.white,
         color: Colors.white,
