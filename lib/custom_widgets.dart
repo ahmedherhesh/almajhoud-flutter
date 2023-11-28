@@ -21,13 +21,6 @@ appBar({String? title}) {
         itemBuilder: (context) {
           return const [
             PopupMenuItem(
-              value: 'home',
-              child: Text(
-                "الوحدات",
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            PopupMenuItem(
               value: 'profile',
               child: Text(
                 "الملف الشخصي",
@@ -48,8 +41,9 @@ appBar({String? title}) {
             print("My account menu is selected.");
           } else if (value == 1) {
             print("Settings menu is selected.");
-          } else if (value == 2) {
-            print("Logout menu is selected.");
+          } else if (value == 'logout') {
+            sharedPreferences!.clear();
+            Get.offAllNamed('login');
           }
         },
       ),
@@ -86,11 +80,11 @@ class CustomListTile extends StatelessWidget {
       child: ListTile(
         leading: Image.asset('assets/images/logo.png'),
         title: Text(
-          '$title',
+          title,
           style: const TextStyle(fontSize: 20),
         ),
         subtitle: Text(
-          '$subTitle',
+          subTitle,
           style: const TextStyle(fontSize: 18),
         ),
       ),
@@ -132,7 +126,7 @@ class CustomDrawer extends StatelessWidget {
                 "الضباط",
                 style: listStyle,
               ),
-              onTap: () => Get.toNamed('home'),
+              onTap: () => Get.toNamed('units'),
             ),
             ListTile(
               leading: const Icon(

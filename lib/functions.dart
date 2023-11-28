@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 // // import 'package:awesome_dialog/awesome_dialog.dart';
 // import 'package:flutter/material.dart';
 
@@ -43,3 +46,17 @@ String validationMsgs(body) {
   return output;
 }
 
+customDialog({String? title, String? middleText}) {
+  Get.defaultDialog(
+    contentPadding: const EdgeInsets.only(right: 20, left: 20),
+    title: '$title',
+    middleText: "$middleText",
+    titleStyle: const TextStyle(
+      color: Colors.red,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
+    middleTextStyle: const TextStyle(fontSize: 18),
+    titlePadding: const EdgeInsets.all(10),
+  );
+}

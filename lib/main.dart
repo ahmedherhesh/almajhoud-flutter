@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/view/auth/login.dart';
-import 'package:flutter_almajhoud/view/home.dart';
+import 'package:flutter_almajhoud/view/units/units.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: primaryColor,
         ),
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        drawerTheme: DrawerThemeData(
+        drawerTheme: const DrawerThemeData(
           backgroundColor: Colors.white,
         ),
       ),
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       home: const Login(),
       getPages: [
         GetPage(name: '/login', page: () => const Login()),
-        GetPage(name: '/home', page: () => const Home()),
+        GetPage(name: '/units', page: () => const Units()),
       ],
     );
   }

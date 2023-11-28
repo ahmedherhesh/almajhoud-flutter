@@ -25,24 +25,13 @@ class _LoginState extends State<Login> {
           await http.post(url, body: {'email': email, 'password': password});
       if (response.statusCode == 422) {
         String text = validationMsgs(response.body);
-        Get.defaultDialog(
-          contentPadding: const EdgeInsets.only(right: 20, left: 20),
-          title: 'خطأ في تسجيل الدخول',
-          middleText: text,
-          titleStyle: const TextStyle(
-            color: Colors.red,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-          middleTextStyle: const TextStyle(fontSize: 18),
-          titlePadding: const EdgeInsets.all(10),
-        );
+        customDialog(title: 'خطأ في تسجيل الدخول', middleText: text);
       } else {
         var body = jsonDecode(response.body);
         if (body['status'] == 400) {
         } else {
           sharedPreferences!.setString('user', response.body);
-          Get.offAndToNamed('home');
+          Get.offAndToNamed('units');
           print(sharedPreferences!.getString('user'));
         }
       }
@@ -87,7 +76,7 @@ class _LoginState extends State<Login> {
                       },
                       decoration: const InputDecoration(
                         labelText: 'الإيميل',
-                        prefixIcon: Icon(Icons.person),
+                        prefixIcon: Icon(Icons.email),
                       ),
                       onChanged: (val) {
                         email = val.toString();
