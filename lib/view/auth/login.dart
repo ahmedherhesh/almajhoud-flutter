@@ -42,6 +42,7 @@ class _LoginState extends State<Login> {
         if (body['status'] == 400) {
         } else {
           sharedPreferences!.setString('user', response.body);
+          Get.offAndToNamed('home');
           print(sharedPreferences!.getString('user'));
         }
       }
