@@ -17,6 +17,8 @@ appBar({String? title}) {
       PopupMenuButton(
         // add icon, by default "3 dot" icon
         // icon: Icon(Icons.book)
+        iconSize: 30,
+        iconColor: Colors.white,
         color: Colors.white,
         itemBuilder: (context) {
           return const [
@@ -78,7 +80,15 @@ class CustomListTile extends StatelessWidget {
         ],
       ),
       child: ListTile(
+        contentPadding: EdgeInsets.all(0),
         leading: Image.asset('assets/images/logo.png'),
+        trailing: IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.more_vert,
+            size: 30,
+          ),
+        ),
         title: Text(
           title,
           style: const TextStyle(fontSize: 20),
