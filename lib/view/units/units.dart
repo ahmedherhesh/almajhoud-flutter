@@ -20,7 +20,7 @@ class _UnitsState extends State<Units> {
         builder: (context, AsyncSnapshot snapshot) {
           List data = snapshot.hasData ? snapshot.data['data'] : [];
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: const CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (data.isNotEmpty) {
             return ListView(
