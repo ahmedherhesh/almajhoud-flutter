@@ -32,7 +32,6 @@ class _LoginState extends State<Login> {
         } else {
           sharedPreferences!.setString('user', response.body);
           Get.offAndToNamed('units');
-          print(sharedPreferences!.getString('user'));
         }
       }
     }
@@ -66,7 +65,16 @@ class _LoginState extends State<Login> {
                 key: formState,
                 child: Column(
                   children: [
-                    Image.asset('assets/images/logo.png', width: 150),
+                    CircleAvatar(
+                      radius: 60,
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
                     TextFormField(
                       validator: (value) {
                         if (value.toString().length < 3) {
@@ -77,6 +85,10 @@ class _LoginState extends State<Login> {
                       decoration: const InputDecoration(
                         labelText: 'الإيميل',
                         prefixIcon: Icon(Icons.email),
+                        labelStyle: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       onChanged: (val) {
                         email = val.toString();
@@ -92,6 +104,10 @@ class _LoginState extends State<Login> {
                       obscureText: true,
                       decoration: const InputDecoration(
                         labelText: 'كلمة السر',
+                        labelStyle: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                         prefixIcon: Icon(Icons.lock),
                       ),
                       onChanged: (val) {
@@ -113,12 +129,11 @@ class _LoginState extends State<Login> {
                           icon: const Icon(
                             Icons.arrow_circle_left_outlined,
                             size: 30,
+                            color: Colors.white,
                           ),
                           label: const Text(
                             'تسجيل الدخول',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
+                            style: TextStyle(fontSize: 20, color: Colors.white),
                           ),
                         ),
                       ),

@@ -21,24 +21,52 @@ class _UnitsState extends State<Units> {
         builder: (context, AsyncSnapshot snapshot) {
           List data = snapshot.hasData ? snapshot.data['data'] : [];
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const CustomProgressIndicator();
           }
           if (data.isNotEmpty) {
             return ListView(
               padding: const EdgeInsets.all(16),
               children: List.generate(
                 data.length,
-                (index) => CustomListTile(
-                    title: '${data[index]['title']}',
-                    subTitle: '${data[index]['user']}'),
+                (index) {
+                  var unit = data[index];
+                  return CustomListTile(
+                    title: '${unit['title']}',
+                    subTitle: '${unit['user']}',
+                    unitViolationsFunction: () async {
+                      Get.toNamed(
+                        'unit-violations',
+                        arguments: {
+                          'unit_id': unit['id'],
+                          'title': unit['title'],
+                        },
+                      );
+                    },
+                    editFunction: () async {
+                      var result = await Get.toNamed('unit-edit', arguments: {
+                        'unit_id': unit['id'],
+                        'title': unit['title'],
+                      });
+                      if (result == 1) setState(() {});
+                    },
+                    deleteFunction: () async {
+                      // if (API.loading) const CustomProgressIndicator();
+                      await API.delete(path: 'units/${data[index]['id']}');
+                      setState(() {});
+                    },
+                  );
+                },
               ),
             );
           }
-          return SizedBox();
+          return const SizedBox();
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.toNamed('unit-create'),
+        onPressed: () async {
+          var result = await Get.toNamed('unit-create');
+          if (result == 1) setState(() {});
+        },
         child: const Icon(
           Icons.add,
           color: Colors.white,

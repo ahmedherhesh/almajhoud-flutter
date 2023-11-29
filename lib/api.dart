@@ -1,5 +1,6 @@
 import "dart:convert";
 
+import "package:flutter_almajhoud/custom_widgets.dart";
 import "package:flutter_almajhoud/env.dart";
 import "package:http/http.dart" as http;
 
@@ -8,6 +9,7 @@ class API {
   static Map<String, String> headers = {
     'Authorization': 'Bearer ${sessionUser['token']}'
   };
+  static bool loading = true;
   static response(response) {
     if (response.statusCode != 200) return;
     var body = jsonDecode(response.body);
@@ -19,25 +21,27 @@ class API {
     ];
   }
 
-  static get({String? path}) async {
+  static Future get({String? path}) async {
+    loading = true;
     var url = Uri.parse('${API.url}/$path');
     var response = await http.get(url, headers: headers);
+    loading = false;
     return API.response(response);
   }
 
-  static post({String? path, Map? body}) async {
+  static Future post({String? path, Map? body}) async {
     var url = Uri.parse('${API.url}/$path');
     var response = await http.post(url, body: body, headers: headers);
     return API.response(response);
   }
 
-  static put({String? path, Map? body}) async {
+  static Future put({String? path, Map? body}) async {
     var url = Uri.parse('${API.url}/$path');
     var response = await http.put(url, body: body, headers: headers);
     return API.response(response);
   }
 
-  static delete({String? path}) async {
+  static Future delete({String? path}) async {
     var url = Uri.parse('${API.url}/$path');
     var response = await http.delete(url, headers: headers);
     return API.response(response);

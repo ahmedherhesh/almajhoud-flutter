@@ -45,10 +45,8 @@ appBar({String? title}) {
           ];
         },
         onSelected: (value) {
-          if (value == 0) {
-            print("My account menu is selected.");
-          } else if (value == 1) {
-            print("Settings menu is selected.");
+          if (value == 'changeMyPassword') {
+            print("Settings menu is changeMyPassword.");
           } else if (value == 'logout') {
             sharedPreferences!.clear();
             Get.offAllNamed('login');
@@ -59,13 +57,30 @@ appBar({String? title}) {
   );
 }
 
+class CustomProgressIndicator extends StatelessWidget {
+  const CustomProgressIndicator({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: CircularProgressIndicator());
+  }
+}
+
 class CustomListTile extends StatelessWidget {
   final String title;
   final String subTitle;
+  final Function unitViolationsFunction;
+  final Function editFunction;
+  final Function deleteFunction;
   const CustomListTile({
     super.key,
     required this.title,
     required this.subTitle,
+    required this.unitViolationsFunction,
+    required this.editFunction,
+    required this.deleteFunction,
   });
 
   @override
@@ -74,26 +89,60 @@ class CustomListTile extends StatelessWidget {
       padding: const EdgeInsets.all(6),
       margin: const EdgeInsets.only(bottom: margin),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(15),
+        border: Border(
+          right: BorderSide(color: primaryColor),
+          bottom: BorderSide(color: primaryColor),
         ),
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 4,
-          ),
-        ],
+        borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: ListTile(
-        contentPadding: EdgeInsets.all(0),
-        leading: Image.asset('assets/images/logo.png'),
-        trailing: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.more_vert,
-            size: 30,
-          ),
+        contentPadding: const EdgeInsets.all(0),
+        leading: Image.asset(
+          'assets/images/logo.png',
+          fit: BoxFit.cover,
+        ),
+        trailing: PopupMenuButton(
+          iconSize: 30,
+          iconColor: Colors.black,
+          color: Colors.white,
+          itemBuilder: (context) {
+            return const [
+              PopupMenuItem(
+                value: 'edit',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Icon(Icons.edit),
+                    Text(
+                      "تعديل",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Icon(Icons.delete),
+                    Text(
+                      "حذف",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
+              ),
+            ];
+          },
+          onSelected: (value) {
+            if (value == 'edit') {
+              editFunction();
+            } else if (value == 'delete') {
+              deleteFunction();
+            }
+          },
         ),
         title: Text(
           title,
@@ -103,6 +152,9 @@ class CustomListTile extends StatelessWidget {
           subTitle,
           style: const TextStyle(fontSize: 18),
         ),
+        onTap: () {
+          unitViolationsFunction();
+        },
       ),
     );
   }

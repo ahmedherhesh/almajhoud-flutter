@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/view/auth/login.dart';
+import 'package:flutter_almajhoud/view/unit_violations/unit_violations.dart';
 import 'package:flutter_almajhoud/view/units/create.dart';
 import 'package:flutter_almajhoud/view/units/edit.dart';
 import 'package:flutter_almajhoud/view/units/units.dart';
@@ -25,12 +26,12 @@ class MyApp extends StatelessWidget {
         primaryColor: primaryColor,
         primarySwatch: Colors.grey,
         elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-          backgroundColor: MaterialStateColor.resolveWith(
-            (states) => primaryColor,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateColor.resolveWith(
+              (states) => primaryColor,
+            ),
           ),
-          
-        )),
+        ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: primaryColor,
         ),
@@ -64,6 +65,11 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/unit-edit',
           page: () => const EditUnit(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/unit-violations',
+          page: () => const UnitViolations(),
           middlewares: [],
         ),
       ],
