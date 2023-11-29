@@ -1,6 +1,5 @@
 import "dart:convert";
 
-import "package:flutter_almajhoud/custom_widgets.dart";
 import "package:flutter_almajhoud/env.dart";
 import "package:http/http.dart" as http;
 
