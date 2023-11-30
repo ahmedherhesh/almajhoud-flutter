@@ -5,14 +5,14 @@ import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:get/get.dart';
 
-class UnitViolations extends StatefulWidget {
-  const UnitViolations({super.key});
+class UnitsViolations extends StatefulWidget {
+  const UnitsViolations({super.key});
 
   @override
-  State<UnitViolations> createState() => _UnitViolationsState();
+  State<UnitsViolations> createState() => _UnitsViolationsState();
 }
 
-class _UnitViolationsState extends State<UnitViolations> {
+class _UnitsViolationsState extends State<UnitsViolations> {
   var args = Get.arguments;
   Map request = {'from': '', 'to': ''};
   @override
@@ -95,7 +95,7 @@ class _UnitViolationsState extends State<UnitViolations> {
             child: FutureBuilder(
               future: API.get(
                 path:
-                    'units/${args['unit_id']}?from=${request['from']}&to=${request['from']}',
+                    'unit-violations?from=${request['from']}&to=${request['from']}',
               ),
               builder: (context, AsyncSnapshot snapshot) {
                 List data = snapshot.hasData ? snapshot.data['data'] : [];

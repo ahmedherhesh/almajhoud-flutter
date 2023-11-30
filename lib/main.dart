@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
+import 'package:flutter_almajhoud/home.dart';
 import 'package:flutter_almajhoud/view/auth/login.dart';
 import 'package:flutter_almajhoud/view/unit_violations/unit_violations.dart';
+import 'package:flutter_almajhoud/view/unit_violations/units_violations.dart';
 import 'package:flutter_almajhoud/view/units/create.dart';
 import 'package:flutter_almajhoud/view/units/edit.dart';
 import 'package:flutter_almajhoud/view/units/units.dart';
@@ -45,6 +47,7 @@ class MyApp extends StatelessWidget {
       textDirection: TextDirection.rtl,
       debugShowCheckedModeBanner: false,
       title: 'Almajhoud',
+      // home: sessionUser.isNotEmpty ? const Home() : const Login(),
       initialRoute: '/login',
       getPages: [
         GetPage(
@@ -70,6 +73,11 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/unit-violations',
           page: () => const UnitViolations(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/units-violations',
+          page: () => const UnitsViolations(),
           middlewares: [],
         ),
       ],

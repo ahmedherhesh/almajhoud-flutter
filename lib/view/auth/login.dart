@@ -23,6 +23,12 @@ class _LoginState extends State<Login> {
       var url = Uri.parse('$mainUrl/login');
       var response =
           await http.post(url, body: {'email': email, 'password': password});
+      if (response.statusCode >= 500) {
+        return customDialog(
+            title: 'خطأ برمجي',
+            middleText: "يرجى الانتظار حتى يقوم الدعم الفني بحل المشكلة");
+      }
+
       if (response.statusCode == 422) {
         String text = validationMsgs(response.body);
         customDialog(title: 'خطأ في تسجيل الدخول', middleText: text);

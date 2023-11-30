@@ -3,7 +3,7 @@ import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:get/get.dart';
 
-appBar({String? title}) {
+appBar({String? title, bool showTabBar = false, tabBar}) {
   return AppBar(
     iconTheme: const IconThemeData(
       color: Colors.white,
@@ -16,6 +16,7 @@ appBar({String? title}) {
         fontSize: 30,
       ),
     ),
+    bottom: showTabBar ? tabBar : null,
     centerTitle: true,
     toolbarHeight: 70,
     elevation: 8,
@@ -216,7 +217,12 @@ class CustomDrawer extends StatelessWidget {
                 "مخالفات الوحدات",
                 style: listStyle,
               ),
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(
+                  'units-violations',
+                  arguments: {'title': 'إجمالي المخالفات'},
+                );
+              },
             ),
             ListTile(
               leading: const Icon(

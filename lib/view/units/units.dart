@@ -32,7 +32,7 @@ class _UnitsState extends State<Units> {
                   var unit = data[index];
                   return CustomListTile(
                     title: '${unit['title']}',
-                    subTitle: '${unit['user']}',
+                    subTitle: '${unit['officer']['name']}',
                     unitViolationsFunction: () async {
                       Get.toNamed(
                         'unit-violations',
