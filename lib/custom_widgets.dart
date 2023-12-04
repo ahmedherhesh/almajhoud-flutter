@@ -30,9 +30,9 @@ appBar({String? title, bool showTabBar = false, tabBar}) {
         itemBuilder: (context) {
           return const [
             PopupMenuItem(
-              value: 'profile',
+              value: 'change-password',
               child: Text(
-                "الملف الشخصي",
+                "تغيير الباسورد",
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -45,8 +45,8 @@ appBar({String? title, bool showTabBar = false, tabBar}) {
             ),
           ];
         },
-        onSelected: (value) {
-          if (value == 'changeMyPassword') {
+        onSelected: (value) async {
+          if (value == 'change-password') {
             print("Settings menu is changeMyPassword.");
           } else if (value == 'logout') {
             sharedPreferences!.clear();
@@ -65,7 +65,11 @@ class CustomProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: CircularProgressIndicator());
+    return const Center(
+      child: CircularProgressIndicator(
+        color: Colors.white,
+      ),
+    );
   }
 }
 
@@ -177,8 +181,8 @@ class CustomDrawer extends StatelessWidget {
         child: ListView(
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text("${sessionUser['name']}"),
-              accountEmail: Text("${sessionUser['email']}"),
+              accountName: Text("${sessionUser!['name']}"),
+              accountEmail: Text("${sessionUser!['email']}"),
               currentAccountPicture: const CircleAvatar(
                 backgroundImage: AssetImage(
                   "assets/images/logo.png",

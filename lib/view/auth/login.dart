@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
@@ -31,13 +33,30 @@ class _LoginState extends State<Login> {
 
       if (response.statusCode == 422) {
         String text = validationMsgs(response.body);
-        customDialog(title: 'خطأ في تسجيل الدخول', middleText: text);
+        return customDialog(title: 'خطأ في تسجيل الدخول', middleText: text);
       } else {
         var body = jsonDecode(response.body);
         if (body['status'] == 400) {
         } else {
           sharedPreferences!.setString('user', response.body);
-          Get.offAndToNamed('units');
+          userInfo = sharedPreferences!.getString('user');
+          sessionUser = userInfo!.isNotEmpty ? jsonDecode(userInfo) : {};
+          if (sessionUser!['role'] == 'admin') {
+            return Get.offAndToNamed('units');
+          }
+
+          if (sessionUser!['unit'] == null) {
+            return customDialog(
+                title: 'عفوا انت لست رئيس لأي وحدة',
+                middleText: 'برجاء الرجوع للأدمن في ذلك');
+          }
+          return Get.offAndToNamed(
+            'unit-violations',
+            arguments: {
+              'unit_id': sessionUser!['unit']['id'],
+              'title': sessionUser!['unit']['title'],
+            },
+          );
         }
       }
     }
@@ -78,7 +97,7 @@ class _LoginState extends State<Login> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     TextFormField(
@@ -125,22 +144,32 @@ class _LoginState extends State<Login> {
                       width: double.infinity,
                       child: Directionality(
                         textDirection: TextDirection.ltr,
-                        child: ElevatedButton.icon(
+                        child: AsyncButtonBuilder(
+                          loadingWidget: const CustomProgressIndicator(),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.arrow_circle_left_outlined,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                              Text(
+                                'تسجيل الدخول',
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                            ],
+                          ),
                           onPressed: () async {
                             await loginProcess();
                           },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(8),
-                          ),
-                          icon: const Icon(
-                            Icons.arrow_circle_left_outlined,
-                            size: 30,
-                            color: Colors.white,
-                          ),
-                          label: const Text(
-                            'تسجيل الدخول',
-                            style: TextStyle(fontSize: 20, color: Colors.white),
-                          ),
+                          builder: (context, child, callback, _) {
+                            return ElevatedButton(
+                              onPressed: callback,
+                              child: child,
+                            );
+                          },
                         ),
                       ),
                     ),

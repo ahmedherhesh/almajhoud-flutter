@@ -4,9 +4,9 @@ import "package:flutter_almajhoud/env.dart";
 import "package:http/http.dart" as http;
 
 class API {
-  static String url = 'http://192.168.43.90/almajhoud/public/api/v1';
+  static String url = mainUrl;
   static Map<String, String> headers = {
-    'Authorization': 'Bearer ${sessionUser['token']}'
+    'Authorization': 'Bearer ${sessionUser!['token']}'
   };
   static bool loading = true;
   static response(response) {
