@@ -18,10 +18,10 @@ class _CreateUnitViolationState extends State<CreateUnitViolation> {
   create() async {
     var formValid = formState.currentState!.validate();
     if (formValid) {
-      var response = await API.get(path: 'violations');
-      if (response['status'] == 200) {
-        Get.back(result: 1);
-      }
+      // var response = await API.get(path: 'violations');
+      // if (response['status'] == 200) {
+      //   Get.back(result: 1);
+      // }
     }
   }
 
@@ -50,13 +50,19 @@ class _CreateUnitViolationState extends State<CreateUnitViolation> {
                     FutureBuilder(
                         future: API.get(path: 'violations'),
                         builder: (context, AsyncSnapshot snapshot) {
-                          List data = snapshot.data ?? [];
+                          print(snapshot.data);
+                          List data =
+                              snapshot.hasData ? snapshot.data['data'] : [];
                           return DropdownButton(
                             items: List.generate(
                               data.length,
-                              (index) => const DropdownMenuItem(
-                                child: Text('data'),
-                              ),
+                              (index) {
+                                var el = data[index];
+                                return DropdownMenuItem(
+                                  value: '${el['id']}',
+                                  child: Text('${el['title']}'),
+                                );
+                              },
                             ),
                             onChanged: (val) {},
                           );

@@ -25,6 +25,7 @@ class API {
     var url = Uri.parse('${API.url}/$path');
     var response = await http.get(url, headers: headers);
     loading = false;
+
     return API.response(response);
   }
 
