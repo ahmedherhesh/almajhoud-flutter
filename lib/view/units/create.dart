@@ -67,7 +67,7 @@ class _CreateUnitState extends State<CreateUnit> {
                     TextFormField(
                       validator: (val) {
                         if (val.toString().length < 3) {
-                          return 'اسم المستخدم يجب أن يحتوى على ثلاثة أحرف أو أكثر';
+                          return 'اسم الوحدة يجب أن يحتوى على ثلاثة أحرف أو أكثر';
                         }
                         return null;
                       },

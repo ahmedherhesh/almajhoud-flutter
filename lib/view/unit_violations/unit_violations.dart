@@ -178,6 +178,15 @@ class _UnitViolationsState extends State<UnitViolations> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Get.toNamed('unit-violation-create');
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }
