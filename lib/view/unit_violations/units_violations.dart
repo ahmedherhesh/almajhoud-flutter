@@ -79,7 +79,6 @@ class _UnitsViolationsState extends State<UnitsViolations> {
                       ),
                     ),
                     onPressed: () {
-                      print(request);
                       setState(() => request);
                     },
                     child: const Icon(
@@ -95,7 +94,7 @@ class _UnitsViolationsState extends State<UnitsViolations> {
             child: FutureBuilder(
               future: API.get(
                 path:
-                    'unit-violations?from=${request['from']}&to=${request['from']}',
+                    'unit-violations?from=${request['from']}&to=${request['to']}',
               ),
               builder: (context, AsyncSnapshot snapshot) {
                 List data = snapshot.hasData ? snapshot.data['data'] : [];

@@ -1,6 +1,7 @@
 import "dart:convert";
 
 import "package:flutter_almajhoud/env.dart";
+import "package:flutter_almajhoud/functions.dart";
 import "package:http/http.dart" as http;
 
 class API {
@@ -14,10 +15,10 @@ class API {
     var body = jsonDecode(response.body);
     if (body['status'] == 200) {
       return body;
+    } else if (body['status'] == 400) {
+      customDialog(title: 'تنبيه', middleText: body['msg']);
+      return body;
     }
-    return [
-      {'status': 400, 'msg': ''}
-    ];
   }
 
   static Future get({String? path}) async {

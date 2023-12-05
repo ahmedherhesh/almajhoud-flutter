@@ -79,7 +79,8 @@ class _UnitViolationsState extends State<UnitViolations> {
                       ),
                     ),
                     onPressed: () {
-                      print(request);
+                      print(
+                          'units/${args['unit_id']}?from=${request['from']}&to=${request['to']}');
                       setState(() => request);
                     },
                     child: const Icon(
@@ -95,10 +96,11 @@ class _UnitViolationsState extends State<UnitViolations> {
             child: FutureBuilder(
               future: API.get(
                 path:
-                    'units/${args['unit_id']}?from=${request['from']}&to=${request['from']}',
+                    'units/${args['unit_id']}?from=${request['from']}&to=${request['to']}',
               ),
               builder: (context, AsyncSnapshot snapshot) {
                 List data = snapshot.hasData ? snapshot.data['data'] : [];
+                print(data);
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CustomProgressIndicator();
                 }
@@ -180,7 +182,13 @@ class _UnitViolationsState extends State<UnitViolations> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Get.toNamed('unit-violation-create');
+          var result = await Get.toNamed(
+            'unit-violation-create',
+            arguments: {
+              'unit_id': '${args['unit_id']}',
+            },
+          );
+          if (result == 1) setState(() {});
         },
         child: const Icon(
           Icons.add,

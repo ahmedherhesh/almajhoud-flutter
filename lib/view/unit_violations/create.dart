@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 class CreateUnitViolation extends StatefulWidget {
@@ -15,18 +16,21 @@ class CreateUnitViolation extends StatefulWidget {
 class _CreateUnitViolationState extends State<CreateUnitViolation> {
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   String? title;
+  Map args = Get.arguments;
+  Map request = {};
   create() async {
     var formValid = formState.currentState!.validate();
     if (formValid) {
-      // var response = await API.get(path: 'violations');
-      // if (response['status'] == 200) {
-      //   Get.back(result: 1);
-      // }
+      var response = await API.post(path: 'unit-violations', body: request);
+      if (response['status'] == 200) {
+        Get.back(result: 1);
+      } 
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    request['unit_id'] = args['unit_id'];
     return Scaffold(
       appBar: appBar(title: 'تسجيل مخالفة'),
       body: Container(
@@ -50,21 +54,24 @@ class _CreateUnitViolationState extends State<CreateUnitViolation> {
                     FutureBuilder(
                         future: API.get(path: 'violations'),
                         builder: (context, AsyncSnapshot snapshot) {
-                          print(snapshot.data);
                           List data =
                               snapshot.hasData ? snapshot.data['data'] : [];
                           return DropdownButton(
+                            hint: const Text('اختر نوع المخالفة'),
                             items: List.generate(
                               data.length,
                               (index) {
                                 var el = data[index];
                                 return DropdownMenuItem(
+                                  alignment: Alignment.center,
                                   value: '${el['id']}',
                                   child: Text('${el['title']}'),
                                 );
                               },
                             ),
-                            onChanged: (val) {},
+                            onChanged: (val) {
+                              request['violation_id'] = val.toString();
+                            },
                           );
                         }),
                     TextFormField(
@@ -90,21 +97,18 @@ class _CreateUnitViolationState extends State<CreateUnitViolation> {
                         ),
                       ),
                       onChanged: (val) {
-                        title = val.toString();
+                        request['count'] = val.toString();
                       },
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
+                        print(request);
                         create();
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.only(
-                          right: 40,
-                          left: 40,
-                          top: 10,
-                          bottom: 10,
-                        ),
+                            right: 40, left: 40, top: 10, bottom: 10),
                       ),
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
