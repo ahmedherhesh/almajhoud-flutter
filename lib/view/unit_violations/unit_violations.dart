@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 class UnitViolations extends StatefulWidget {
@@ -100,7 +101,6 @@ class _UnitViolationsState extends State<UnitViolations> {
               ),
               builder: (context, AsyncSnapshot snapshot) {
                 List data = snapshot.hasData ? snapshot.data['data'] : [];
-                print(data);
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CustomProgressIndicator();
                 }
@@ -141,17 +141,26 @@ class _UnitViolationsState extends State<UnitViolations> {
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ),
+                                Padding(
+                                  padding: EdgeInsets.all(12),
+                                  child: Text(
+                                    '',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
                               ],
                             ),
                             ...List.generate(
                               data.length,
                               (index) {
+                                var el = data[index];
                                 return TableRow(
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(12),
                                       child: Text(
-                                        '${data[index]['violation']}',
+                                        '${el['violation']}',
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(fontSize: 20),
                                       ),
@@ -159,9 +168,48 @@ class _UnitViolationsState extends State<UnitViolations> {
                                     Padding(
                                       padding: const EdgeInsets.all(12),
                                       child: Text(
-                                        '${data[index]['count']}',
+                                        '${el['count']}',
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                              Icons.edit_square,
+                                              color: primaryColor,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () async {
+                                              customDialog(
+                                                title: 'تحذير',
+                                                middleText:
+                                                    'هل انت متأكد من حذف هذه المخالفة',
+                                                confirm: () async {
+                                                  var response = await API.delete(
+                                                      path:
+                                                          'unit-violations/${el['id']}');
+                                                  if (response['status'] ==
+                                                      200) {
+                                                    setState(() {});
+                                                    Get.back();
+                                                  }
+                                                },
+                                              );
+                                            },
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              color: primaryColor,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],

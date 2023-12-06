@@ -46,7 +46,7 @@ String validationMsgs(body) {
   return output;
 }
 
-customDialog({String? title, String? middleText}) {
+customDialog({String? title, String? middleText, confirm, cancel}) {
   Get.defaultDialog(
     contentPadding: const EdgeInsets.only(right: 20, left: 20),
     title: '$title',
@@ -58,5 +58,25 @@ customDialog({String? title, String? middleText}) {
     ),
     middleTextStyle: const TextStyle(fontSize: 18),
     titlePadding: const EdgeInsets.all(10),
+    confirm: confirm != null
+        ? ElevatedButton(
+            onPressed: confirm,
+            child: const Text(
+              'نعم',
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          )
+        : confirm,
+    cancel: confirm != null
+        ? ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text(
+              'لا',
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+          )
+        : confirm,
   );
 }

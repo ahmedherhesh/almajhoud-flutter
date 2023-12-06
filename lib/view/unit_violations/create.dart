@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
-import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 class CreateUnitViolation extends StatefulWidget {
