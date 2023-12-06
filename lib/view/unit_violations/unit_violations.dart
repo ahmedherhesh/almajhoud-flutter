@@ -99,7 +99,6 @@ class _UnitViolationsState extends State<UnitViolations> {
               ),
               builder: (context, AsyncSnapshot snapshot) {
                 List data = snapshot.hasData ? snapshot.data['data'] : [];
-                print(data);
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CustomProgressIndicator();
                 }
@@ -179,8 +178,8 @@ class _UnitViolationsState extends State<UnitViolations> {
                                             MainAxisAlignment.center,
                                         children: [
                                           IconButton(
-                                            onPressed: () {
-                                              Get.toNamed(
+                                            onPressed: () async {
+                                              var result = await Get.toNamed(
                                                 'unit-violation-update',
                                                 arguments: {
                                                   'unit_id':
@@ -189,6 +188,7 @@ class _UnitViolationsState extends State<UnitViolations> {
                                                   'count': '${el['count']}',
                                                 },
                                               );
+                                              if (result == 1) setState(() {});
                                             },
                                             icon: const Icon(
                                               Icons.edit_square,

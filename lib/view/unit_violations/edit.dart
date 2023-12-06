@@ -17,10 +17,11 @@ class _EditUnitViolationState extends State<EditUnitViolation> {
   String? title;
   Map args = Get.arguments;
   Map request = {};
-  create() async {
+  update() async {
     var formValid = formState.currentState!.validate();
     if (formValid) {
-      var response = await API.put(path: 'unit-violations', body: request);
+      var response = await API.put(
+          path: 'unit-violations/${args['violation_id']}', body: request);
       if (response['status'] == 200) {
         Get.back(result: 1);
       }
@@ -83,7 +84,7 @@ class _EditUnitViolationState extends State<EditUnitViolation> {
                     ElevatedButton(
                       onPressed: () {
                         print(request);
-                        // create();
+                        update();
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.only(
