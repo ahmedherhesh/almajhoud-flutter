@@ -4,6 +4,7 @@ import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/home.dart';
 import 'package:flutter_almajhoud/view/auth/login.dart';
 import 'package:flutter_almajhoud/view/unit_violations/create.dart';
+import 'package:flutter_almajhoud/view/unit_violations/edit.dart';
 import 'package:flutter_almajhoud/view/unit_violations/unit_violations.dart';
 import 'package:flutter_almajhoud/view/unit_violations/units_violations.dart';
 import 'package:flutter_almajhoud/view/units/create.dart';
@@ -78,7 +79,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: '/unit-violation-update',
-          page: () => const CreateUnitViolation(),
+          page: () => const EditUnitViolation(),
           middlewares: [],
         ),
         GetPage(

@@ -80,8 +80,6 @@ class _UnitViolationsState extends State<UnitViolations> {
                       ),
                     ),
                     onPressed: () {
-                      print(
-                          'units/${args['unit_id']}?from=${request['from']}&to=${request['to']}');
                       setState(() => request);
                     },
                     child: const Icon(
@@ -101,6 +99,7 @@ class _UnitViolationsState extends State<UnitViolations> {
               ),
               builder: (context, AsyncSnapshot snapshot) {
                 List data = snapshot.hasData ? snapshot.data['data'] : [];
+                print(data);
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CustomProgressIndicator();
                 }
@@ -180,7 +179,17 @@ class _UnitViolationsState extends State<UnitViolations> {
                                             MainAxisAlignment.center,
                                         children: [
                                           IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Get.toNamed(
+                                                'unit-violation-update',
+                                                arguments: {
+                                                  'unit_id':
+                                                      '${args['unit_id']}',
+                                                  'violation_id': '${el['id']}',
+                                                  'count': '${el['count']}',
+                                                },
+                                              );
+                                            },
                                             icon: const Icon(
                                               Icons.edit_square,
                                               color: primaryColor,

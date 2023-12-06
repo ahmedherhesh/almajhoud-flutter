@@ -23,15 +23,17 @@ class _EditUnitViolationState extends State<EditUnitViolation> {
       var response = await API.put(path: 'unit-violations', body: request);
       if (response['status'] == 200) {
         Get.back(result: 1);
-      } 
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     request['unit_id'] = args['unit_id'];
+    request['count'] = args['count'];
+
     return Scaffold(
-      appBar: appBar(title: 'تسجيل مخالفة'),
+      appBar: appBar(title: 'تعديل مخالفة'),
       body: Container(
         margin: const EdgeInsets.only(top: 10),
         padding: const EdgeInsets.all(10),
@@ -50,29 +52,6 @@ class _EditUnitViolationState extends State<EditUnitViolation> {
                 key: formState,
                 child: Column(
                   children: [
-                    FutureBuilder(
-                        future: API.get(path: 'violations'),
-                        builder: (context, AsyncSnapshot snapshot) {
-                          List data =
-                              snapshot.hasData ? snapshot.data['data'] : [];
-                          return DropdownButton(
-                            hint: const Text('اختر نوع المخالفة'),
-                            items: List.generate(
-                              data.length,
-                              (index) {
-                                var el = data[index];
-                                return DropdownMenuItem(
-                                  alignment: Alignment.center,
-                                  value: '${el['id']}',
-                                  child: Text('${el['title']}'),
-                                );
-                              },
-                            ),
-                            onChanged: (val) {
-                              request['violation_id'] = val.toString();
-                            },
-                          );
-                        }),
                     TextFormField(
                       validator: (val) {
                         val = val.toString();
@@ -87,6 +66,7 @@ class _EditUnitViolationState extends State<EditUnitViolation> {
                       },
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      initialValue: request['count'],
                       decoration: const InputDecoration(
                         labelText: 'العدد',
                         contentPadding: EdgeInsets.only(top: 20, bottom: 20),
@@ -103,7 +83,7 @@ class _EditUnitViolationState extends State<EditUnitViolation> {
                     ElevatedButton(
                       onPressed: () {
                         print(request);
-                        create();
+                        // create();
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.only(
