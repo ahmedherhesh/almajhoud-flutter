@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/functions.dart';
@@ -95,7 +96,8 @@ class _LoginState extends State<Login> {
                         labelText: 'الإيميل',
                         prefixIcon: Icon(Icons.email),
                         labelStyle: TextStyle(
-                          fontSize: 20,
+                          color: primaryColor,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -114,7 +116,8 @@ class _LoginState extends State<Login> {
                       decoration: const InputDecoration(
                         labelText: 'كلمة السر',
                         labelStyle: TextStyle(
-                          fontSize: 20,
+                          color: primaryColor,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                         prefixIcon: Icon(Icons.lock),
@@ -124,39 +127,59 @@ class _LoginState extends State<Login> {
                       },
                     ),
                     Container(
-                      margin: const EdgeInsets.only(top: 40),
-                      width: double.infinity,
-                      child: Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: AsyncButtonBuilder(
-                          loadingWidget: const CustomProgressIndicator(),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.arrow_circle_left_outlined,
-                                size: 30,
+                        margin: const EdgeInsets.only(top: 40),
+                        width: double.infinity,
+                        child: Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: ElevatedButton.icon(
+                            onPressed: ()  {
+                               loginProcess();
+                            },
+                            icon: const Icon(
+                              Icons.arrow_circle_left_outlined,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                            label: const Text(
+                              'تسجيل الدخول',
+                              style: TextStyle(
+                                fontSize: 20,
                                 color: Colors.white,
                               ),
-                              Text(
-                                'تسجيل الدخول',
-                                style: TextStyle(
-                                    fontSize: 20, color: Colors.white),
-                              ),
-                            ],
+                            ),
                           ),
-                          onPressed: () async {
-                            await loginProcess();
-                          },
-                          builder: (context, child, callback, _) {
-                            return ElevatedButton(
-                              onPressed: callback,
-                              child: child,
-                            );
-                          },
+                        )
+                        // Directionality(
+                        //   textDirection: TextDirection.ltr,
+                        //   child: AsyncButtonBuilder(
+                        //     loadingWidget: const CustomProgressIndicator(),
+                        //     child: const Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [
+                        //         Icon(
+                        //           Icons.arrow_circle_left_outlined,
+                        //           size: 30,
+                        //           color: Colors.white,
+                        //         ),
+                        //         Text(
+                        //           'تسجيل الدخول',
+                        //           style: TextStyle(
+                        //               fontSize: 20, color: Colors.white),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //     onPressed: () async {
+                        //       await loginProcess();
+                        //     },
+                        //     builder: (context, child, callback, _) {
+                        //       return ElevatedButton(
+                        //         onPressed: callback,
+                        //         child: child,
+                        //       );
+                        //     },
+                        //   ),
+                        // ),
                         ),
-                      ),
-                    ),
                   ],
                 ),
               ),
