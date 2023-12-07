@@ -18,7 +18,7 @@ class _CreateUnitState extends State<CreateUnit> {
     var formValid = formState.currentState!.validate();
     if (formValid) {
       var response = await API.post(path: 'units', body: {"title": title});
-      if (response['status'] == 200) {
+      if (response.containsKey('status') && response['status'] == 200) {
         Get.back(result: 1);
       }
     }

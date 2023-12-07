@@ -33,6 +33,7 @@ class _UnitsViolationsState extends State<UnitsViolations> {
                     margin: const EdgeInsets.only(bottom: 12),
                     child: DateTimeFormField(
                       decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(8),
                         hintStyle: TextStyle(color: Colors.black45),
                         errorStyle: TextStyle(color: Colors.redAccent),
                         border: OutlineInputBorder(),
@@ -44,6 +45,7 @@ class _UnitsViolationsState extends State<UnitsViolations> {
                       onDateSelected: (DateTime value) {
                         String val = "$value".split(' ')[0];
                         request['from'] = val;
+                        setState(() => request);
                       },
                     ),
                   ),
@@ -55,6 +57,7 @@ class _UnitsViolationsState extends State<UnitsViolations> {
                     margin: const EdgeInsets.only(bottom: 12),
                     child: DateTimeFormField(
                       decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.all(8),
                         hintStyle: TextStyle(color: Colors.black45),
                         errorStyle: TextStyle(color: Colors.redAccent),
                         border: OutlineInputBorder(),
@@ -66,27 +69,28 @@ class _UnitsViolationsState extends State<UnitsViolations> {
                       onDateSelected: (DateTime value) {
                         String val = "$value".split(' ')[0];
                         request['to'] = val;
+                        setState(() => request);
                       },
                     ),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateColor.resolveWith(
-                        (states) => primaryColor,
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() => request);
-                    },
-                    child: const Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
+                // Container(
+                //   margin: const EdgeInsets.only(right: 10),
+                //   child: ElevatedButton(
+                //     style: ButtonStyle(
+                //       backgroundColor: MaterialStateColor.resolveWith(
+                //         (states) => primaryColor,
+                //       ),
+                //     ),
+                //     onPressed: () {
+                //       setState(() => request);
+                //     },
+                //     child: const Icon(
+                //       Icons.search,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // )
               ],
             ),
           ),

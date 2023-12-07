@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/functions.dart';
+import 'package:flutter_almajhoud/middleware/auth_middleware.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,24 +40,7 @@ class _LoginState extends State<Login> {
         if (body['status'] == 400) {
         } else {
           sharedPreferences!.setString('user', response.body);
-          userInfo = sharedPreferences!.getString('user');
-          sessionUser = userInfo!.isNotEmpty ? jsonDecode(userInfo) : {};
-          if (sessionUser!['role'] == 'admin') {
-            return Get.offAndToNamed('units');
-          }
-
-          if (sessionUser!['unit'] == null) {
-            return customDialog(
-                title: 'عفوا انت لست رئيس لأي وحدة',
-                middleText: 'برجاء الرجوع للأدمن في ذلك');
-          }
-          return Get.offAndToNamed(
-            'unit-violations',
-            arguments: {
-              'unit_id': sessionUser!['unit']['id'],
-              'title': sessionUser!['unit']['title'],
-            },
-          );
+          return Get.offAndToNamed('login');
         }
       }
     }

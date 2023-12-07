@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
+import 'package:flutter_almajhoud/middleware/auth_middleware.dart';
 import 'package:flutter_almajhoud/view/auth/login.dart';
 import 'package:flutter_almajhoud/view/unit_violations/create.dart';
 import 'package:flutter_almajhoud/view/unit_violations/edit.dart';
@@ -23,11 +24,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      // localizationsDelegates: [
+      //    GlobalMaterialLocalization.delegate
+      //  ],
+      // supportedLocales: [const Locale('ar')],
       theme: ThemeData(
         fontFamily: 'Cairo',
         scaffoldBackgroundColor: Colors.white,
         primaryColor: primaryColor,
         primarySwatch: Colors.grey,
+        colorScheme: Theme.of(context).colorScheme.copyWith(
+              primary: primaryColor,
+            ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateColor.resolveWith(
@@ -54,7 +62,7 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/login',
           page: () => const Login(),
-          middlewares: [],
+          middlewares: [AuthMiddleware()],
         ),
         GetPage(
           name: '/units',

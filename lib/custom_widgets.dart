@@ -169,6 +169,27 @@ class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
     super.key,
   });
+  drawerListTile({title, IconData? icon, listStyle, onTap}) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 8),
+        decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: Colors.grey))),
+        child: ListTile(
+          leading: Icon(
+            icon,
+            size: 30,
+          ),
+          title: Text(
+            "$title",
+            style: listStyle,
+          ),
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,70 +197,59 @@ class CustomDrawer extends StatelessWidget {
       fontSize: 18,
       fontWeight: FontWeight.bold,
     );
-    return SafeArea(
-      child: Drawer(
-        child: ListView(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text("${sessionUser!['name']}"),
-              accountEmail: Text("${sessionUser!['email']}"),
-              currentAccountPicture: const CircleAvatar(
-                backgroundImage: AssetImage(
-                  "assets/images/logo.png",
+    return SizedBox(
+      height: 440,
+      child: SafeArea(
+        child: Drawer(
+          backgroundColor: Colors.white,
+          child: ListView(
+            children: [
+              UserAccountsDrawerHeader(
+                accountName: Text(
+                  "${sessionUser!['name']}",
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
                 ),
+                accountEmail: Text(
+                  "${sessionUser!['email']}",
+                  style: const TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                currentAccountPicture: const CircleAvatar(
+                  backgroundImage: AssetImage(
+                    "assets/images/logo.png",
+                  ),
+                ),
+                decoration:
+                    const BoxDecoration(color: primaryColor),
               ),
-              decoration: const BoxDecoration(color: primaryColor),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.person,
-                size: 30,
+              drawerListTile(
+                title: 'الوحدات',
+                icon: Icons.home,
+                listStyle: listStyle,
+                onTap: () => Get.toNamed('units'),
               ),
-              title: const Text(
-                "الضباط",
-                style: listStyle,
+              drawerListTile(
+                title: 'الضباط',
+                icon: Icons.person,
+                listStyle: listStyle,
+                onTap: () => Get.toNamed('units'),
               ),
-              onTap: () => Get.toNamed('units'),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.home,
-                size: 30,
-              ),
-              title: const Text(
-                "الوحدات",
-                style: listStyle,
-              ),
-              onTap: () => Get.toNamed('home'),
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.dangerous,
-                size: 30,
-              ),
-              title: const Text(
-                "مخالفات الوحدات",
-                style: listStyle,
-              ),
-              onTap: () {
-                Get.toNamed(
+              drawerListTile(
+                title: 'مخالفات الوحدات',
+                icon: Icons.dangerous,
+                listStyle: listStyle,
+                onTap: () => Get.toNamed(
                   'units-violations',
                   arguments: {'title': 'إجمالي المخالفات'},
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.dangerous,
-                size: 30,
+                ),
               ),
-              title: const Text(
-                "المخالفات",
-                style: listStyle,
+              drawerListTile(
+                title: 'المخالفات',
+                icon: Icons.dangerous,
+                listStyle: listStyle,
+                onTap: () => Get.toNamed('units'),
               ),
-              onTap: () {},
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
