@@ -79,7 +79,7 @@ class _LoginState extends State<Login> {
                       radius: 60,
                       child: Image.asset(
                         'assets/images/logo.png',
-                        fit: BoxFit.cover,
+                        // fit: BoxFit.cover,
                       ),
                     ),
                     const SizedBox(
@@ -132,8 +132,8 @@ class _LoginState extends State<Login> {
                         child: Directionality(
                           textDirection: TextDirection.ltr,
                           child: ElevatedButton.icon(
-                            onPressed: ()  {
-                               loginProcess();
+                            onPressed: () {
+                              loginProcess();
                             },
                             icon: const Icon(
                               Icons.arrow_circle_left_outlined,
