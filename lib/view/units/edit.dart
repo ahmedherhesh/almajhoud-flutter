@@ -18,7 +18,7 @@ class _EditUnitState extends State<EditUnit> {
     'title': '',
     'unit_id': '',
   };
-  create() async {
+  edit() async {
     var formValid = formState.currentState!.validate();
     if (formValid) {
       var response =
@@ -62,7 +62,7 @@ class _EditUnitState extends State<EditUnit> {
                       initialValue: data['title'],
                       validator: (val) {
                         if (val.toString().length < 3) {
-                          return 'اسم المستخدم يجب أن يحتوى على ثلاثة أحرف أو أكثر';
+                          return 'اسم الوحدة يجب أن يحتوى على ثلاثة أحرف أو أكثر';
                         }
                         return null;
                       },
@@ -81,7 +81,7 @@ class _EditUnitState extends State<EditUnit> {
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
-                        create();
+                        edit();
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.only(

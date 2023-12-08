@@ -13,7 +13,7 @@ appBar({String? title, bool showTabBar = false, tabBar}) {
       '$title',
       style: const TextStyle(
         color: Colors.white,
-        fontSize: 30,
+        fontSize: 25,
       ),
     ),
     bottom: showTabBar ? tabBar : null,
@@ -75,14 +75,14 @@ class CustomProgressIndicator extends StatelessWidget {
 
 class CustomListTile extends StatelessWidget {
   final String title;
-  final String subTitle;
+  String? subTitle;
   final Function unitViolationsFunction;
   final Function editFunction;
   final Function deleteFunction;
-  const CustomListTile({
+  CustomListTile({
     super.key,
     required this.title,
-    required this.subTitle,
+    this.subTitle,
     required this.unitViolationsFunction,
     required this.editFunction,
     required this.deleteFunction,
@@ -153,10 +153,12 @@ class CustomListTile extends StatelessWidget {
           title,
           style: const TextStyle(fontSize: 20),
         ),
-        subtitle: Text(
-          subTitle,
-          style: const TextStyle(fontSize: 18),
-        ),
+        subtitle: subTitle != null
+            ? Text(
+                '$subTitle',
+                style: const TextStyle(fontSize: 18),
+              )
+            : null,
         onTap: () {
           unitViolationsFunction();
         },
@@ -218,8 +220,7 @@ class CustomDrawer extends StatelessWidget {
                     "assets/images/logo.png",
                   ),
                 ),
-                decoration:
-                    const BoxDecoration(color: primaryColor),
+                decoration: const BoxDecoration(color: primaryColor),
               ),
               drawerListTile(
                 title: 'الوحدات',
@@ -231,7 +232,7 @@ class CustomDrawer extends StatelessWidget {
                 title: 'الضباط',
                 icon: Icons.person,
                 listStyle: listStyle,
-                onTap: () => Get.toNamed('units'),
+                onTap: () => Get.toNamed('users'),
               ),
               drawerListTile(
                 title: 'مخالفات الوحدات',
@@ -246,7 +247,7 @@ class CustomDrawer extends StatelessWidget {
                 title: 'المخالفات',
                 icon: Icons.dangerous,
                 listStyle: listStyle,
-                onTap: () => Get.toNamed('units'),
+                onTap: () => Get.toNamed('violations'),
               ),
             ],
           ),

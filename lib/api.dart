@@ -11,25 +11,28 @@ class API {
   };
   static bool loading = true;
   static response(response) {
-    if (response.statusCode != 200) return;
-    var body = jsonDecode(response.body);
     if (response.statusCode >= 500) {
-      return customDialog(
+      customDialog(
         title: 'خطأ برمجي',
         middleText: "يرجى الانتظار حتى يقوم الدعم الفني بحل المشكلة",
       );
     }
+    if (response.statusCode == 404) {
+      customDialog(
+        title: 'خطأ ',
+        middleText: "هذه الصفحة غير موجوده",
+      );
+    }
+    if (response.statusCode != 200) return {'status': response.statusCode};
+    var body = jsonDecode(response.body);
     if (response.statusCode == 422) {
       String text = validationMsgs(response.body);
-      return customDialog(title: 'خطأ في البيانات المدخلة ', middleText: text);
-    }
-    if (body['status'] == 200) {
-      return body;
+      customDialog(title: 'خطأ في البيانات المدخلة ', middleText: text);
     }
     if (body['status'] == 400) {
       customDialog(title: 'تنبيه', middleText: body['msg']);
-      return body;
     }
+    return body;
   }
 
   static Future get({String? path}) async {

@@ -10,6 +10,10 @@ import 'package:flutter_almajhoud/view/unit_violations/units_violations.dart';
 import 'package:flutter_almajhoud/view/units/create.dart';
 import 'package:flutter_almajhoud/view/units/edit.dart';
 import 'package:flutter_almajhoud/view/units/units.dart';
+import 'package:flutter_almajhoud/view/users/users.dart';
+import 'package:flutter_almajhoud/view/violations/create.dart';
+import 'package:flutter_almajhoud/view/violations/edit.dart';
+import 'package:flutter_almajhoud/view/violations/violations.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,10 +28,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      // localizationsDelegates: [
-      //    GlobalMaterialLocalization.delegate
-      //  ],
-      // supportedLocales: [const Locale('ar')],
       theme: ThemeData(
         fontFamily: 'Cairo',
         scaffoldBackgroundColor: Colors.white,
@@ -97,6 +97,26 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/units-violations',
           page: () => const UnitsViolations(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/users',
+          page: () => const Users(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/violations',
+          page: () => const Violations(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/violation-create',
+          page: () => const CreateViolation(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/violation-edit',
+          page: () => const EditViolation(),
           middlewares: [],
         ),
       ],

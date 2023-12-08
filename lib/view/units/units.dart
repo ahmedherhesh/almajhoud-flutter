@@ -14,7 +14,6 @@ class Units extends StatefulWidget {
 class _UnitsState extends State<Units> {
   @override
   Widget build(BuildContext context) {
-    print(sessionUser);
     return Scaffold(
       appBar: appBar(title: 'الوحدات'),
       drawer: const CustomDrawer(),
