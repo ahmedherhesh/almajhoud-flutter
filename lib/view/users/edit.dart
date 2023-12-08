@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
@@ -18,30 +20,36 @@ class _EditUserState extends State<EditUser> {
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   var args = Get.arguments;
   Map data = {
-    'user_id': '',
     'name': '',
     'email': '',
     'role': '',
     'permissions': [],
   };
+  List allPermissions = [];
   edit() async {
     var formValid = formState.currentState!.validate();
     if (formValid) {
       var response =
-          await API.put(path: 'users/${data['user_id']}', body: data);
+          await API.put(path: 'users/${args['user_id']}', body: data);
       if (response.containsKey('status') && response['status'] == 200) {
         Get.back(result: 1);
       }
     }
   }
 
+  permissions() async {
+    var response = await API.get(path: 'permissions');
+    allPermissions = response['data'];
+    setState(() {});
+  }
+
   @override
   void initState() {
-    data['user_id'] = args['user_id'].toString();
     data['name'] = args['name'].toString();
     data['email'] = args['email'].toString();
     data['role'] = args['role'].toString();
-    data['permissions'] = args['permissions'].toString();
+    data['permissions'] = args['permissions'];
+    permissions();
     super.initState();
   }
 
@@ -89,12 +97,10 @@ class _EditUserState extends State<EditUser> {
                     ),
                     TextFormField(
                       initialValue: data['email'],
-                      validator: (val) {
-                        if (val.toString().length < 3) {
-                          return 'اسم الضابط يجب أن يحتوى على ثلاثة أحرف أو أكثر';
-                        }
-                        return null;
-                      },
+                      validator: (value) =>
+                          EmailValidator.validate(value.toString())
+                              ? null
+                              : "يرجى كتابة ايميل صحيح",
                       decoration: const InputDecoration(
                         labelText: 'الايميل',
                         contentPadding: EdgeInsets.only(top: 20, bottom: 20),
@@ -122,35 +128,52 @@ class _EditUserState extends State<EditUser> {
                         onChanged: (val) {}),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: MultiSelectDialogField(
-                        items: [
-                          MultiSelectItem('value', 'label1'),
-                          MultiSelectItem('value2', 'label2'),
-                          MultiSelectItem('value3', 'label3'),
-                        ],
-                        title: const Text("الصلاحيات"),
-                        selectedColor: primaryColor,
-                        decoration: const BoxDecoration(
-                          border:
-                              Border(bottom: BorderSide(color: Colors.grey)),
-                        ),
-                        buttonText: const Text(
-                          "الصلاحيات",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                          ),
-                        ),
-                        onConfirm: (results) {
-                          data['permissions'] = jsonEncode(results);
-                          print(data['permissions']);
-                        },
-                        initialValue: ['value', 'value3'],
-                      ),
+                      child: allPermissions.isNotEmpty
+                          ? MultiSelectDialogField(
+                              items: List.generate(
+                                allPermissions.length,
+                                (index) => MultiSelectItem(
+                                  allPermissions[index],
+                                  allPermissions[index],
+                                ),
+                              ),
+                              title: const Text("الصلاحيات"),
+                              selectedColor: primaryColor,
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(color: Colors.grey)),
+                              ),
+                              buttonText: const Text(
+                                "الصلاحيات",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              onConfirm: (results) {
+                                data['permissions'] = results;
+                              },
+                              initialValue: data['permissions'],
+                            )
+                          : Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.only(bottom: 8),
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(color: Colors.grey)),
+                              ),
+                              child: const Text(
+                                'الصلاحيات',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  // fontWeight: FontWeight.bold,
+                                ),
+                              )),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
+                        data['permissions'] = jsonEncode(data['permissions']);
                         edit();
                       },
                       style: ElevatedButton.styleFrom(
@@ -187,7 +210,6 @@ class _EditUserState extends State<EditUser> {
           ],
         ),
       ),
-      
     );
   }
 }
