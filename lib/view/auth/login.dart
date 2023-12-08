@@ -76,10 +76,10 @@ class _LoginState extends State<Login> {
                 child: Column(
                   children: [
                     CircleAvatar(
+                      backgroundColor: Colors.transparent,
                       radius: 60,
                       child: Image.asset(
                         'assets/images/logo.png',
-                        // fit: BoxFit.cover,
                       ),
                     ),
                     const SizedBox(
@@ -127,59 +127,59 @@ class _LoginState extends State<Login> {
                       },
                     ),
                     Container(
-                        margin: const EdgeInsets.only(top: 40),
-                        width: double.infinity,
-                        child: Directionality(
-                          textDirection: TextDirection.ltr,
-                          child: ElevatedButton.icon(
-                            onPressed: () {
-                              loginProcess();
-                            },
-                            icon: const Icon(
-                              Icons.arrow_circle_left_outlined,
-                              size: 30,
-                              color: Colors.white,
-                            ),
-                            label: const Text(
-                              'تسجيل الدخول',
-                              style: TextStyle(
-                                fontSize: 20,
+                      margin: const EdgeInsets.only(top: 40),
+                      width: double.infinity,
+                      child: Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: AsyncButtonBuilder(
+                          loadingWidget: const CustomProgressIndicator(),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.arrow_circle_left_outlined,
+                                size: 30,
                                 color: Colors.white,
                               ),
-                            ),
+                              Text(
+                                'تسجيل الدخول',
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                            ],
                           ),
-                        )
-                        // Directionality(
-                        //   textDirection: TextDirection.ltr,
-                        //   child: AsyncButtonBuilder(
-                        //     loadingWidget: const CustomProgressIndicator(),
-                        //     child: const Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         Icon(
-                        //           Icons.arrow_circle_left_outlined,
-                        //           size: 30,
-                        //           color: Colors.white,
-                        //         ),
-                        //         Text(
-                        //           'تسجيل الدخول',
-                        //           style: TextStyle(
-                        //               fontSize: 20, color: Colors.white),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //     onPressed: () async {
-                        //       await loginProcess();
-                        //     },
-                        //     builder: (context, child, callback, _) {
-                        //       return ElevatedButton(
-                        //         onPressed: callback,
-                        //         child: child,
-                        //       );
-                        //     },
-                        //   ),
-                        // ),
+                          onPressed: () async {
+                            await loginProcess();
+                          },
+                          builder: (context, child, callback, _) {
+                            return ElevatedButton(
+                              onPressed: callback,
+                              child: child,
+                            );
+                          },
                         ),
+                      ),
+                      // Directionality(
+                      //     textDirection: TextDirection.ltr,
+                      //     child: ElevatedButton.icon(
+                      //       onPressed: () {
+                      //         loginProcess();
+                      //       },
+                      //       icon: const Icon(
+                      //         Icons.arrow_circle_left_outlined,
+                      //         size: 30,
+                      //         color: Colors.white,
+                      //       ),
+                      //       label: const Text(
+                      //         'تسجيل الدخول',
+                      //         style: TextStyle(
+                      //           fontSize: 20,
+                      //           color: Colors.white,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   )
+                    ),
                   ],
                 ),
               ),
