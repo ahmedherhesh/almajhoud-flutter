@@ -23,7 +23,7 @@ class _CreateUnitViolationState extends State<CreateUnitViolation> {
       var response = await API.post(path: 'unit-violations', body: request);
       if (response['status'] == 200) {
         Get.back(result: 1);
-      } 
+      }
     }
   }
 
@@ -51,28 +51,29 @@ class _CreateUnitViolationState extends State<CreateUnitViolation> {
                 child: Column(
                   children: [
                     FutureBuilder(
-                        future: API.get(path: 'violations'),
-                        builder: (context, AsyncSnapshot snapshot) {
-                          List data =
-                              snapshot.hasData ? snapshot.data['data'] : [];
-                          return DropdownButton(
-                            hint: const Text('اختر نوع المخالفة'),
-                            items: List.generate(
-                              data.length,
-                              (index) {
-                                var el = data[index];
-                                return DropdownMenuItem(
-                                  alignment: Alignment.center,
-                                  value: '${el['id']}',
-                                  child: Text('${el['title']}'),
-                                );
-                              },
-                            ),
-                            onChanged: (val) {
-                              request['violation_id'] = val.toString();
+                      future: API.get(path: 'violations'),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        List data =
+                            snapshot.hasData ? snapshot.data['data'] : [];
+                        return DropdownButtonFormField(
+                          hint: const Text('اختر نوع المخالفة'),
+                          items: List.generate(
+                            data.length,
+                            (index) {
+                              var el = data[index];
+                              return DropdownMenuItem(
+                                alignment: Alignment.center,
+                                value: '${el['id']}',
+                                child: Text('${el['title']}'),
+                              );
                             },
-                          );
-                        }),
+                          ),
+                          onChanged: (val) {
+                            request['violation_id'] = val.toString();
+                          },
+                        );
+                      },
+                    ),
                     TextFormField(
                       validator: (val) {
                         val = val.toString();

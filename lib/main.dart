@@ -10,6 +10,8 @@ import 'package:flutter_almajhoud/view/unit_violations/units_violations.dart';
 import 'package:flutter_almajhoud/view/units/create.dart';
 import 'package:flutter_almajhoud/view/units/edit.dart';
 import 'package:flutter_almajhoud/view/units/units.dart';
+import 'package:flutter_almajhoud/view/users/create.dart';
+import 'package:flutter_almajhoud/view/users/edit.dart';
 import 'package:flutter_almajhoud/view/users/users.dart';
 import 'package:flutter_almajhoud/view/violations/create.dart';
 import 'package:flutter_almajhoud/view/violations/edit.dart';
@@ -102,6 +104,16 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/users',
           page: () => const Users(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/user-create',
+          page: () => const CreateUser(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/user-edit',
+          page: () => const EditUser(),
           middlewares: [],
         ),
         GetPage(

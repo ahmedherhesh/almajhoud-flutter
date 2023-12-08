@@ -24,6 +24,7 @@ class API {
       );
     }
     if (response.statusCode != 200) return {'status': response.statusCode};
+    
     var body = jsonDecode(response.body);
     if (response.statusCode == 422) {
       String text = validationMsgs(response.body);
