@@ -13,9 +13,20 @@ class API {
   static response(response) {
     if (response.statusCode != 200) return;
     var body = jsonDecode(response.body);
+    if (response.statusCode >= 500) {
+      return customDialog(
+        title: 'خطأ برمجي',
+        middleText: "يرجى الانتظار حتى يقوم الدعم الفني بحل المشكلة",
+      );
+    }
+    if (response.statusCode == 422) {
+      String text = validationMsgs(response.body);
+      return customDialog(title: 'خطأ في البيانات المدخلة ', middleText: text);
+    }
     if (body['status'] == 200) {
       return body;
-    } else if (body['status'] == 400) {
+    }
+    if (body['status'] == 400) {
       customDialog(title: 'تنبيه', middleText: body['msg']);
       return body;
     }

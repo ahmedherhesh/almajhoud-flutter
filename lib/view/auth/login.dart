@@ -36,13 +36,14 @@ class _LoginState extends State<Login> {
       if (response.statusCode == 422) {
         String text = validationMsgs(response.body);
         return customDialog(title: 'خطأ في تسجيل الدخول', middleText: text);
+      }
+      var body = jsonDecode(response.body);
+      if (body['status'] == 400) {
+        customDialog(title: 'تنبيه', middleText: body['msg']);
+        return body;
       } else {
-        var body = jsonDecode(response.body);
-        if (body['status'] == 400) {
-        } else {
-          sharedPreferences!.setString('user', response.body);
-          return Get.offAndToNamed('login');
-        }
+        sharedPreferences!.setString('user', response.body);
+        return Get.offAndToNamed('login');
       }
     }
   }
