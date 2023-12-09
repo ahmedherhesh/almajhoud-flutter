@@ -6,7 +6,6 @@ import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/functions.dart';
-import 'package:flutter_almajhoud/middleware/auth_middleware.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 

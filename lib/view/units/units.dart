@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/api.dart';
-import 'package:flutter_almajhoud/env.dart';
 import 'package:get/get.dart';
 
 class Units extends StatefulWidget {

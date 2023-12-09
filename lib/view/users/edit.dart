@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
@@ -125,7 +124,9 @@ class _EditUserState extends State<EditUser> {
                             child: Text('أدمن'),
                           ),
                         ],
-                        onChanged: (val) {}),
+                        onChanged: (val) {
+                          data['role'] = val.toString();
+                        }),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: allPermissions.isNotEmpty

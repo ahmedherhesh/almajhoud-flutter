@@ -1,7 +1,6 @@
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
-import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:get/get.dart';
 

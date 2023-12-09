@@ -73,6 +73,7 @@ class CustomProgressIndicator extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class CustomListTile extends StatelessWidget {
   final String title;
   String? subTitle;
