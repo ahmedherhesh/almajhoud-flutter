@@ -41,6 +41,7 @@ class _UsersState extends State<Users> {
                         'name': user['name'],
                         'email': user['email'],
                         'role': user['role'],
+                        'status': user['status'],
                         'permissions': user['permissions'],
                         'unit': user['unit'],
                       });

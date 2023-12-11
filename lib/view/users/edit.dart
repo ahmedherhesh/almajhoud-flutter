@@ -6,6 +6,8 @@ import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+// import 'package:toggle_switch/toggle_switch.dart';
+
 import 'package:get/get.dart';
 
 class EditUser extends StatefulWidget {
@@ -22,6 +24,7 @@ class _EditUserState extends State<EditUser> {
     'name': '',
     'email': '',
     'role': '',
+    'status': '',
     'permissions': [],
   };
   List allPermissions = [];
@@ -47,6 +50,7 @@ class _EditUserState extends State<EditUser> {
     data['name'] = args['name'].toString();
     data['email'] = args['email'].toString();
     data['role'] = args['role'].toString();
+    data['status'] = args['status'].toString();
     data['permissions'] = args['permissions'];
     permissions();
     super.initState();
@@ -113,20 +117,38 @@ class _EditUserState extends State<EditUser> {
                       },
                     ),
                     DropdownButtonFormField(
-                        hint: Text(data['role'] == 'admin' ? 'أدمن' : 'مستخدم'),
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'user',
-                            child: Text('مستخدم'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'admin',
-                            child: Text('أدمن'),
-                          ),
-                        ],
-                        onChanged: (val) {
-                          data['role'] = val.toString();
-                        }),
+                      hint: Text(data['role'] == 'admin' ? 'أدمن' : 'مستخدم'),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'user',
+                          child: Text('مستخدم'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'admin',
+                          child: Text('أدمن'),
+                        ),
+                      ],
+                      onChanged: (val) {
+                        data['role'] = val.toString();
+                      },
+                    ),
+                    DropdownButtonFormField(
+                      hint: Text(data['status'] == 'active' ? 'مفعل' : 'محظور'),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'active',
+                          child: Text('تفعيل'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'block',
+                          child: Text('حظر'),
+                        ),
+                      ],
+                      onChanged: (val) {
+                        print(data['status']);
+                        data['status'] = val.toString();
+                      },
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: allPermissions.isNotEmpty

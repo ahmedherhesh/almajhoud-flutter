@@ -46,6 +46,7 @@ class _UnitsState extends State<Units> {
                       var result = await Get.toNamed('unit-edit', arguments: {
                         'unit_id': unit['id'],
                         'title': unit['title'],
+                        'officer': unit['officer']['name']
                       });
                       if (result == 1) setState(() {});
                     },
