@@ -47,7 +47,7 @@ appBar({String? title, bool showTabBar = false, tabBar}) {
         },
         onSelected: (value) async {
           if (value == 'change-password') {
-            print("Settings menu is changeMyPassword.");
+            Get.toNamed('change-password');
           } else if (value == 'logout') {
             sharedPreferences!.clear();
             Get.offAllNamed('login');
