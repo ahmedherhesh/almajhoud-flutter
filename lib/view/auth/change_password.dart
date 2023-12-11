@@ -1,13 +1,9 @@
-import 'dart:convert';
 import 'package:async_button_builder/async_button_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
-import 'package:flutter_almajhoud/env.dart';
-import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class ChangePassword extends StatefulWidget {
@@ -129,8 +125,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       child: Directionality(
                         textDirection: TextDirection.ltr,
                         child: AsyncButtonBuilder(
-                          // loadingWidget: const CustomProgressIndicator(),
-
+                          loadingWidget: const CustomProgressIndicator(),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
