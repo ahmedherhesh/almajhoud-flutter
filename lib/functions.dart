@@ -1,41 +1,29 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_almajhoud/api.dart';
+import 'package:flutter_almajhoud/env.dart';
 import 'package:get/get.dart';
 
-// // import 'package:awesome_dialog/awesome_dialog.dart';
-// import 'package:flutter/material.dart';
-
-// AwesomeDialog awesomeDialog(context, body) {
-//   body = jsonDecode(body);
-//   return AwesomeDialog(
-//     context: context,
-//     dialogType: DialogType.ERROR,
-//     animType: AnimType.SCALE,
-//     title: 'Validation Error',
-//     headerAnimationLoop: false,
-//     titleTextStyle: const TextStyle(
-//       color: Colors.red,
-//       fontWeight: FontWeight.bold,
-//       fontSize: 25,
-//     ),
-//     body: Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: List.generate(
-//         body.values.length,
-//         (index) => Text(
-//           '${body.values.toList()[index][0]}',
-//           style: const TextStyle(
-//             // fontWeight: FontWeight.bold,
-//             fontSize: 18,
-//           ),
-//         ),
-//       ),
-//     ),
-//     btnCancelOnPress: () {},
-//     btnOkOnPress: () {},
-//   );
-// }
+Future checkPermission(permission) async {
+  // var res = await API.get(path: 'user', showDialog: false);
+  // if (res.containsKey('data') && res['data'].containsKey('permissions')) {
+  //   if (!res['data']['permissions'].contains(permission)) {
+  //     String userData = jsonEncode(res['data']);
+  //     sharedPreferences!.setString('user', userData);
+  //     userInfo = sharedPreferences!.getString('user');
+  //     sessionUser = res['data'];
+  //     return Get.back();
+  //   }
+  //   return null;
+  // }
+  userInfo = sharedPreferences!.getString('user');
+  sessionUser = jsonDecode(userInfo);
+  if (!sessionUser!['permissions'].contains(permission)) {
+    return Get.back();
+  }
+  return null;
+}
 
 String validationMsgs(body) {
   String output = '';

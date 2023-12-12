@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +17,12 @@ class UnitViolations extends StatefulWidget {
 class _UnitViolationsState extends State<UnitViolations> {
   var args = Get.arguments;
   Map request = {'from': '', 'to': ''};
+  @override
+  void initState() {
+    checkPermission('عرض مخالفات الوحدات');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,23 +82,6 @@ class _UnitViolationsState extends State<UnitViolations> {
                     ),
                   ),
                 ),
-                // Container(
-                //   margin: const EdgeInsets.only(right: 10),
-                //   child: ElevatedButton(
-                //     style: ButtonStyle(
-                //       backgroundColor: MaterialStateColor.resolveWith(
-                //         (states) => primaryColor,
-                //       ),
-                //     ),
-                //     onPressed: () {
-                //       setState(() => request);
-                //     },
-                //     child: const Icon(
-                //       Icons.search,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                // )
               ],
             ),
           ),
@@ -110,6 +100,10 @@ class _UnitViolationsState extends State<UnitViolations> {
                   return const CustomProgressIndicator();
                 }
                 if (data.isNotEmpty) {
+                  bool canEdit = sessionUser!['permissions']
+                      .contains('تعديل مخالفات الوحدات');
+                  bool canDelete = sessionUser!['permissions']
+                      .contains('حذف مخالفات الوحدات');
                   return ListView(
                     padding: const EdgeInsets.all(16),
                     children: [
@@ -178,56 +172,78 @@ class _UnitViolationsState extends State<UnitViolations> {
                                         style: const TextStyle(fontSize: 20),
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          IconButton(
-                                            onPressed: () async {
-                                              var result = await Get.toNamed(
-                                                'unit-violation-update',
-                                                arguments: {
-                                                  'unit_id':
-                                                      '${args['unit_id']}',
-                                                  'violation_id': '${el['id']}',
-                                                  'count': '${el['count']}',
-                                                },
-                                              );
-                                              if (result == 1) setState(() {});
-                                            },
-                                            icon: const Icon(
-                                              Icons.edit_square,
-                                              color: primaryColor,
+                                    canEdit || canDelete
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(12),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                sessionUser!['permissions']
+                                                        .contains(
+                                                            'تعديل مخالفات الوحدات')
+                                                    ? IconButton(
+                                                        onPressed: () async {
+                                                          var result =
+                                                              await Get.toNamed(
+                                                            'unit-violation-update',
+                                                            arguments: {
+                                                              'unit_id':
+                                                                  '${args['unit_id']}',
+                                                              'violation_id':
+                                                                  '${el['id']}',
+                                                              'count':
+                                                                  '${el['count']}',
+                                                            },
+                                                          );
+                                                          if (result == 1)
+                                                            setState(() {});
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.edit_square,
+                                                          color: primaryColor,
+                                                        ),
+                                                      )
+                                                    : const SizedBox(),
+                                                sessionUser!['permissions']
+                                                        .contains(
+                                                            'حذف مخالفات الوحدات')
+                                                    ? IconButton(
+                                                        onPressed: () async {
+                                                          customDialog(
+                                                            title: 'تحذير',
+                                                            middleText:
+                                                                'هل انت متأكد من حذف هذه المخالفة',
+                                                            confirm: () async {
+                                                              var response =
+                                                                  await API.delete(
+                                                                      path:
+                                                                          'unit-violations/${el['id']}');
+                                                              if (response[
+                                                                      'status'] ==
+                                                                  200) {
+                                                                setState(() {});
+                                                                Get.back();
+                                                              }
+                                                            },
+                                                          );
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.delete,
+                                                          color: primaryColor,
+                                                        ),
+                                                      )
+                                                    : const SizedBox(),
+                                              ],
                                             ),
+                                          )
+                                        : const Text(
+                                            '---',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                          IconButton(
-                                            onPressed: () async {
-                                              customDialog(
-                                                title: 'تحذير',
-                                                middleText:
-                                                    'هل انت متأكد من حذف هذه المخالفة',
-                                                confirm: () async {
-                                                  var response = await API.delete(
-                                                      path:
-                                                          'unit-violations/${el['id']}');
-                                                  if (response['status'] ==
-                                                      200) {
-                                                    setState(() {});
-                                                    Get.back();
-                                                  }
-                                                },
-                                              );
-                                            },
-                                            icon: const Icon(
-                                              Icons.delete,
-                                              color: primaryColor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
                                   ],
                                 );
                               },
@@ -244,21 +260,24 @@ class _UnitViolationsState extends State<UnitViolations> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var result = await Get.toNamed(
-            'unit-violation-create',
-            arguments: {
-              'unit_id': '${args['unit_id']}',
-            },
-          );
-          if (result == 1) setState(() {});
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton:
+          sessionUser!['permissions'].contains('اضافة مخالفات الوحدات')
+              ? FloatingActionButton(
+                  onPressed: () async {
+                    var result = await Get.toNamed(
+                      'unit-violation-create',
+                      arguments: {
+                        'unit_id': '${args['unit_id']}',
+                      },
+                    );
+                    if (result == 1) setState(() {});
+                  },
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                )
+              : null,
     );
   }
 }

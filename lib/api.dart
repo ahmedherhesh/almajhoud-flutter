@@ -10,56 +10,60 @@ class API {
     'Authorization': 'Bearer ${sessionUser!['token']}'
   };
   static bool loading = true;
-  static response(response) {
+  static response({response, bool showDialog = true}) {
     if (response.statusCode >= 500) {
-      customDialog(
-        title: 'خطأ برمجي',
-        middleText: "يرجى الانتظار حتى يقوم الدعم الفني بحل المشكلة",
-      );
+      if (showDialog) {
+        customDialog(
+          title: 'خطأ برمجي',
+          middleText: "يرجى الانتظار حتى يقوم الدعم الفني بحل المشكلة",
+        );
+      }
+    } else if (response.statusCode == 404) {
+      if (showDialog) {
+        customDialog(
+          title: 'خطأ ',
+          middleText: "هذه الصفحة غير موجوده",
+        );
+      }
     }
-    if (response.statusCode == 404) {
-      customDialog(
-        title: 'خطأ ',
-        middleText: "هذه الصفحة غير موجوده",
-      );
-    }
-    if (response.statusCode != 200) return {'status': response.statusCode};
+    // if (response.statusCode != 200) return {'status': response.statusCode};
 
     var body = jsonDecode(response.body);
     if (response.statusCode == 422) {
       String text = validationMsgs(response.body);
-      customDialog(title: 'خطأ في البيانات المدخلة ', middleText: text);
+      if (showDialog) {
+        customDialog(title: 'خطأ في البيانات المدخلة ', middleText: text);
+      }
     }
     if (body['status'] == 400) {
-      customDialog(title: 'تنبيه', middleText: body['msg']);
+      if (showDialog) customDialog(title: 'تنبيه', middleText: body['msg']);
+    } else if (body['status'] == 403) {
+      if (showDialog) customDialog(title: 'تنبيه', middleText: body['msg']);
     }
     return body;
   }
 
-  static Future get({String? path}) async {
-    loading = true;
+  static Future get({String? path, bool showDialog = true}) async {
     var url = Uri.parse('${API.url}/$path');
     var response = await http.get(url, headers: headers);
-    loading = false;
-
-    return API.response(response);
+    return API.response(response: response, showDialog: showDialog);
   }
 
-  static Future post({String? path, Map? body}) async {
+  static Future post({String? path, Map? body, bool showDialog = true}) async {
     var url = Uri.parse('${API.url}/$path');
     var response = await http.post(url, body: body, headers: headers);
-    return API.response(response);
+    return API.response(response: response, showDialog: showDialog);
   }
 
-  static Future put({String? path, Map? body}) async {
+  static Future put({String? path, Map? body, bool showDialog = true}) async {
     var url = Uri.parse('${API.url}/$path');
     var response = await http.put(url, body: body, headers: headers);
-    return API.response(response);
+    return API.response(response: response, showDialog: showDialog);
   }
 
-  static Future delete({String? path}) async {
+  static Future delete({String? path, bool showDialog = true}) async {
     var url = Uri.parse('${API.url}/$path');
     var response = await http.delete(url, headers: headers);
-    return API.response(response);
+    return API.response(response: response, showDialog: showDialog);
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/api.dart';
+import 'package:flutter_almajhoud/env.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 class Units extends StatefulWidget {
@@ -12,6 +14,13 @@ class Units extends StatefulWidget {
 
 class _UnitsState extends State<Units> {
   @override
+  void initState() {
+    checkPermission('عرض الوحدات');
+    print(sessionUser);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: 'الوحدات'),
@@ -19,7 +28,10 @@ class _UnitsState extends State<Units> {
       body: FutureBuilder(
         future: API.get(path: 'units'),
         builder: (context, AsyncSnapshot snapshot) {
-          List data = snapshot.hasData ? snapshot.data['data'] : [];
+          List data = snapshot.hasData && snapshot.data.containsKey('data')
+              ? snapshot.data['data']
+              : [];
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CustomProgressIndicator();
           }
@@ -33,14 +45,21 @@ class _UnitsState extends State<Units> {
                   return CustomListTile(
                     title: '${unit['title']}',
                     subTitle: '${unit['officer']['name']}',
-                    unitViolationsFunction: () async {
-                      Get.toNamed(
-                        'unit-violations',
-                        arguments: {
-                          'unit_id': unit['id'],
-                          'title': unit['title'],
-                        },
-                      );
+                    canEdit:
+                        sessionUser!['permissions'].contains('تعديل الوحدات'),
+                    canDelete:
+                        sessionUser!['permissions'].contains('حذف الوحدات'),
+                    unitViolationsFunction: () {
+                      if (sessionUser!['permissions']
+                          .contains('عرض مخالفات الوحدات')) {
+                        Get.toNamed(
+                          'unit-violations',
+                          arguments: {
+                            'unit_id': unit['id'],
+                            'title': unit['title'],
+                          },
+                        );
+                      }
                     },
                     editFunction: () async {
                       var result = await Get.toNamed('unit-edit', arguments: {
@@ -63,16 +82,19 @@ class _UnitsState extends State<Units> {
           return const SizedBox();
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var result = await Get.toNamed('unit-create');
-          if (result == 1) setState(() {});
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton:
+          sessionUser!['permissions'].contains('اضافة الوحدات')
+              ? FloatingActionButton(
+                  onPressed: () async {
+                    var result = await Get.toNamed('unit-create');
+                    if (result == 1) setState(() {});
+                  },
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                )
+              : null,
     );
   }
 }

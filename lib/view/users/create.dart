@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:get/get.dart';
 
@@ -44,6 +45,7 @@ class _CreateUserState extends State<CreateUser> {
 
   @override
   void initState() {
+    checkPermission('اضافة الضباط');
     permissions();
     super.initState();
   }
@@ -145,6 +147,10 @@ class _CreateUserState extends State<CreateUser> {
                       padding: const EdgeInsets.only(top: 8.0),
                       child: allPermissions.isNotEmpty
                           ? MultiSelectDialogField(
+                              itemsTextStyle: const TextStyle(
+                                  fontSize: 16, fontFamily: 'Cairo'),
+                              selectedItemsTextStyle: const TextStyle(
+                                  fontSize: 16, fontFamily: 'Cairo'),
                               items: List.generate(
                                 allPermissions.length,
                                 (index) => MultiSelectItem(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/env.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 class Users extends StatefulWidget {
@@ -11,6 +13,12 @@ class Users extends StatefulWidget {
 }
 
 class _UsersState extends State<Users> {
+  @override
+  void initState() {
+    checkPermission('عرض الضباط');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +42,10 @@ class _UsersState extends State<Users> {
                   return CustomListTile(
                     title: '${user['name']}',
                     subTitle: user['unit']['title'],
+                    canEdit:
+                        sessionUser!['permissions'].contains('تعديل الضباط'),
+                    canDelete:
+                        sessionUser!['permissions'].contains('حذف الضباط'),
                     unitViolationsFunction: () => false,
                     editFunction: () async {
                       var result = await Get.toNamed('user-edit', arguments: {
@@ -60,16 +72,18 @@ class _UsersState extends State<Users> {
           return const SizedBox();
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var result = await Get.toNamed('user-create');
-          if (result == 1) setState(() {});
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton: sessionUser!['permissions'].contains('اضافة الضباط')
+          ? FloatingActionButton(
+              onPressed: () async {
+                var result = await Get.toNamed('user-create');
+                if (result == 1) setState(() {});
+              },
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            )
+          : null,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 class EditUnit extends StatefulWidget {
@@ -46,6 +47,7 @@ class _EditUnitState extends State<EditUnit> {
 
   @override
   void initState() {
+    checkPermission('تعديل الوحدات');
     data['title'] = args['title'].toString();
     data['unit_id'] = args['unit_id'].toString();
     unitOfficerData['unit_id'] = args['unit_id'].toString();

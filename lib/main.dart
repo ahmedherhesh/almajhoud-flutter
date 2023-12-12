@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/middleware/auth_middleware.dart';
+import 'package:flutter_almajhoud/middleware/check_permission_middleware.dart';
 import 'package:flutter_almajhoud/view/auth/change_password.dart';
 import 'package:flutter_almajhoud/view/auth/login.dart';
 import 'package:flutter_almajhoud/view/unit_violations/create.dart';
@@ -117,7 +118,7 @@ class MyApp extends StatelessWidget {
           page: () => const EditUser(),
           middlewares: [],
         ),
-         GetPage(
+        GetPage(
           name: '/change-password',
           page: () => const ChangePassword(),
           middlewares: [],

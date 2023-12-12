@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 class EditUnitViolation extends StatefulWidget {
@@ -29,10 +30,15 @@ class _EditUnitViolationState extends State<EditUnitViolation> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    checkPermission('تعديل مخالفات الوحدات');
     request['unit_id'] = args['unit_id'];
     request['count'] = args['count'];
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: 'تعديل مخالفة'),
       body: Container(

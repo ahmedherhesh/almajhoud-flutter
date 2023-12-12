@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 appBar({String? title, bool showTabBar = false, tabBar}) {
@@ -77,6 +78,8 @@ class CustomProgressIndicator extends StatelessWidget {
 class CustomListTile extends StatelessWidget {
   final String title;
   String? subTitle;
+  bool canEdit;
+  bool canDelete;
   final Function unitViolationsFunction;
   final Function editFunction;
   final Function deleteFunction;
@@ -87,6 +90,8 @@ class CustomListTile extends StatelessWidget {
     required this.unitViolationsFunction,
     required this.editFunction,
     required this.deleteFunction,
+    this.canEdit = true,
+    this.canDelete = true,
   });
 
   @override
@@ -108,48 +113,67 @@ class CustomListTile extends StatelessWidget {
           'assets/images/logo.png',
           fit: BoxFit.cover,
         ),
-        trailing: PopupMenuButton(
-          iconSize: 30,
-          iconColor: Colors.black,
-          color: Colors.white,
-          itemBuilder: (context) {
-            return const [
-              PopupMenuItem(
-                value: 'edit',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Icon(Icons.edit),
-                    Text(
-                      "تعديل",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 'delete',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Icon(Icons.delete),
-                    Text(
-                      "حذف",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              ),
-            ];
-          },
-          onSelected: (value) {
-            if (value == 'edit') {
-              editFunction();
-            } else if (value == 'delete') {
-              deleteFunction();
-            }
-          },
-        ),
+        trailing: canEdit || canDelete
+            ? PopupMenuButton(
+                iconSize: 30,
+                iconColor: Colors.black,
+                color: Colors.white,
+                itemBuilder: (context) {
+                  return [
+                    canEdit
+                        ? const PopupMenuItem(
+                            value: 'edit',
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(Icons.edit),
+                                Text(
+                                  "تعديل",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const PopupMenuItem(
+                            value: '',
+                            child: SizedBox(),
+                          ),
+                    canDelete
+                        ? const PopupMenuItem(
+                            value: 'delete',
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(Icons.delete),
+                                Text(
+                                  "حذف",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                          )
+                        : const PopupMenuItem(
+                            value: '',
+                            child: SizedBox(),
+                          ),
+                  ];
+                },
+                onSelected: (value) {
+                  if (value == 'edit') {
+                    editFunction();
+                  } else if (value == 'delete') {
+                    customDialog(
+                      title: 'تحذير',
+                      middleText: 'هل انت متأكد من الحذف  ',
+                      confirm: () {
+                        deleteFunction();
+                        Get.back();
+                      },
+                    );
+                  }
+                },
+              )
+            : const SizedBox(),
         title: Text(
           title,
           style: const TextStyle(fontSize: 20),
@@ -223,33 +247,41 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 decoration: const BoxDecoration(color: primaryColor),
               ),
-              drawerListTile(
-                title: 'الوحدات',
-                icon: Icons.home,
-                listStyle: listStyle,
-                onTap: () => Get.toNamed('units'),
-              ),
-              drawerListTile(
-                title: 'الضباط',
-                icon: Icons.person,
-                listStyle: listStyle,
-                onTap: () => Get.toNamed('users'),
-              ),
-              drawerListTile(
-                title: 'مخالفات الوحدات',
-                icon: Icons.dangerous,
-                listStyle: listStyle,
-                onTap: () => Get.toNamed(
-                  'units-violations',
-                  arguments: {'title': 'إجمالي المخالفات'},
-                ),
-              ),
-              drawerListTile(
-                title: 'المخالفات',
-                icon: Icons.dangerous,
-                listStyle: listStyle,
-                onTap: () => Get.toNamed('violations'),
-              ),
+              sessionUser!['permissions'].contains('عرض الوحدات')
+                  ? drawerListTile(
+                      title: 'الوحدات',
+                      icon: Icons.home,
+                      listStyle: listStyle,
+                      onTap: () => Get.toNamed('units'),
+                    )
+                  : const SizedBox(),
+              sessionUser!['permissions'].contains('عرض الضباط')
+                  ? drawerListTile(
+                      title: 'الضباط',
+                      icon: Icons.person,
+                      listStyle: listStyle,
+                      onTap: () => Get.toNamed('users'),
+                    )
+                  : const SizedBox(),
+              sessionUser!['permissions'].contains('عرض اجمالي المخالفات')
+                  ? drawerListTile(
+                      title: 'مخالفات الوحدات',
+                      icon: Icons.dangerous,
+                      listStyle: listStyle,
+                      onTap: () => Get.toNamed(
+                        'units-violations',
+                        arguments: {'title': 'إجمالي المخالفات'},
+                      ),
+                    )
+                  : const SizedBox(),
+              sessionUser!['permissions'].contains('عرض عناوين المخالفات')
+                  ? drawerListTile(
+                      title: 'عناوين المخالفات',
+                      icon: Icons.dangerous,
+                      listStyle: listStyle,
+                      onTap: () => Get.toNamed('violations'),
+                    )
+                  : const SizedBox(),
             ],
           ),
         ),

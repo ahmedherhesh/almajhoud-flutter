@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 class CreateUnit extends StatefulWidget {
@@ -22,6 +23,12 @@ class _CreateUnitState extends State<CreateUnit> {
         Get.back(result: 1);
       }
     }
+  }
+
+  @override
+  void initState() {
+    checkPermission('اضافة الوحدات');
+    super.initState();
   }
 
   @override

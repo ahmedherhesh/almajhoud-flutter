@@ -2,6 +2,7 @@ import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 class UnitsViolations extends StatefulWidget {
@@ -14,6 +15,12 @@ class UnitsViolations extends StatefulWidget {
 class _UnitsViolationsState extends State<UnitsViolations> {
   var args = Get.arguments;
   Map request = {'from': '', 'to': ''};
+  @override
+  void initState() {
+    checkPermission('عرض اجمالي المخالفات');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,23 +80,6 @@ class _UnitsViolationsState extends State<UnitsViolations> {
                     ),
                   ),
                 ),
-                // Container(
-                //   margin: const EdgeInsets.only(right: 10),
-                //   child: ElevatedButton(
-                //     style: ButtonStyle(
-                //       backgroundColor: MaterialStateColor.resolveWith(
-                //         (states) => primaryColor,
-                //       ),
-                //     ),
-                //     onPressed: () {
-                //       setState(() => request);
-                //     },
-                //     child: const Icon(
-                //       Icons.search,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                // )
               ],
             ),
           ),
@@ -100,7 +90,10 @@ class _UnitsViolationsState extends State<UnitsViolations> {
                     'unit-violations?from=${request['from']}&to=${request['to']}',
               ),
               builder: (context, AsyncSnapshot snapshot) {
-                List data = snapshot.hasData ? snapshot.data['data'] : [];
+                List data =
+                    snapshot.hasData && snapshot.data.containsKey('data')
+                        ? snapshot.data['data']
+                        : [];
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CustomProgressIndicator();
                 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/env.dart';
+import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
 class Violations extends StatefulWidget {
@@ -11,6 +13,12 @@ class Violations extends StatefulWidget {
 }
 
 class _ViolationsState extends State<Violations> {
+  @override
+  void initState() {
+    checkPermission('عرض عناوين المخالفات');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +43,14 @@ class _ViolationsState extends State<Violations> {
                   return CustomListTile(
                     title: '${violation['title']}',
                     subTitle: '',
+                    canEdit: sessionUser!['permissions']
+                        .contains('تعديل عناوين المخالفات'),
+                    canDelete: sessionUser!['permissions']
+                        .contains('حذف عناوين المخالفات'),
                     unitViolationsFunction: () => false,
                     editFunction: () async {
-                      var result = await Get.toNamed('violation-edit', arguments: {
+                      var result =
+                          await Get.toNamed('violation-edit', arguments: {
                         'violation_id': violation['id'],
                         'title': violation['title'],
                       });
@@ -56,16 +69,19 @@ class _ViolationsState extends State<Violations> {
           return const SizedBox();
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var result = await Get.toNamed('violation-create');
-          if (result == 1) setState(() {});
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      ),
+      floatingActionButton:
+          sessionUser!['permissions'].contains('اضافة عناوين المخالفات')
+              ? FloatingActionButton(
+                  onPressed: () async {
+                    var result = await Get.toNamed('violation-create');
+                    if (result == 1) setState(() {});
+                  },
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                )
+              : null,
     );
   }
 }
