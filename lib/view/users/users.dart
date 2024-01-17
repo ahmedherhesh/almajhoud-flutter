@@ -42,12 +42,17 @@ class _UsersState extends State<Users> {
                   var user = data[index];
                   return CustomListTile(
                     title: '${user['name']}',
-                    subTitle: user['unit']['title'],
                     canEdit:
                         sessionUser!['permissions'].contains('تعديل الضباط'),
                     canDelete:
                         sessionUser!['permissions'].contains('حذف الضباط'),
-                    unitViolationsFunction: () => false,
+                    onTap: () => Get.toNamed(
+                      'officer-violations',
+                      arguments: {
+                        'user_id': user['id'],
+                        'title': user['name'],
+                      },
+                    ),
                     editFunction: () async {
                       var result = await Get.toNamed('user-edit', arguments: {
                         'user_id': user['id'],
@@ -56,7 +61,6 @@ class _UsersState extends State<Users> {
                         'role': user['role'],
                         'status': user['status'],
                         'permissions': user['permissions'],
-                        'unit': user['unit'],
                       });
                       if (result == 1) setState(() {});
                     },

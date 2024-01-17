@@ -80,14 +80,14 @@ class CustomListTile extends StatelessWidget {
   String? subTitle;
   bool canEdit;
   bool canDelete;
-  final Function unitViolationsFunction;
+  final Function onTap;
   final Function editFunction;
   final Function deleteFunction;
   CustomListTile({
     super.key,
     required this.title,
     this.subTitle,
-    required this.unitViolationsFunction,
+    required this.onTap,
     required this.editFunction,
     required this.deleteFunction,
     this.canEdit = true,
@@ -185,7 +185,7 @@ class CustomListTile extends StatelessWidget {
               )
             : null,
         onTap: () {
-          unitViolationsFunction();
+          onTap();
         },
       ),
     );
@@ -224,66 +224,55 @@ class CustomDrawer extends StatelessWidget {
       fontSize: 18,
       fontWeight: FontWeight.bold,
     );
-    return SizedBox(
-      height: 440,
-      child: SafeArea(
-        child: Drawer(
-          backgroundColor: Colors.white,
-          child: ListView(
-            children: [
-              UserAccountsDrawerHeader(
-                accountName: Text(
-                  "${sessionUser!['name']}",
-                  style: const TextStyle(color: Colors.white, fontSize: 18),
-                ),
-                accountEmail: Text(
-                  "${sessionUser!['email']}",
-                  style: const TextStyle(color: Colors.white, fontSize: 18),
-                ),
-                currentAccountPicture: const CircleAvatar(
-                  backgroundImage: AssetImage(
-                    "assets/images/logo.png",
-                  ),
-                ),
-                decoration: const BoxDecoration(color: primaryColor),
+    return SafeArea(
+      child: Drawer(
+        backgroundColor: Colors.white,
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                "${sessionUser!['name']}",
+                style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
-              sessionUser!['permissions'].contains('عرض الوحدات')
-                  ? drawerListTile(
-                      title: 'الوحدات',
-                      icon: Icons.home,
-                      listStyle: listStyle,
-                      onTap: () => Get.toNamed('units'),
-                    )
-                  : const SizedBox(),
-              sessionUser!['permissions'].contains('عرض الضباط')
-                  ? drawerListTile(
-                      title: 'الضباط',
-                      icon: Icons.person,
-                      listStyle: listStyle,
-                      onTap: () => Get.toNamed('users'),
-                    )
-                  : const SizedBox(),
-              sessionUser!['permissions'].contains('عرض اجمالي المخالفات')
-                  ? drawerListTile(
-                      title: 'مخالفات الوحدات',
-                      icon: Icons.dangerous,
-                      listStyle: listStyle,
-                      onTap: () => Get.toNamed(
-                        'units-violations',
-                        arguments: {'title': 'إجمالي المخالفات'},
-                      ),
-                    )
-                  : const SizedBox(),
-              sessionUser!['permissions'].contains('عرض عناوين المخالفات')
-                  ? drawerListTile(
-                      title: 'عناوين المخالفات',
-                      icon: Icons.dangerous,
-                      listStyle: listStyle,
-                      onTap: () => Get.toNamed('violations'),
-                    )
-                  : const SizedBox(),
-            ],
-          ),
+              accountEmail: Text(
+                "${sessionUser!['email']}",
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+              ),
+              currentAccountPicture: const CircleAvatar(
+                backgroundImage: AssetImage(
+                  "assets/images/logo.png",
+                ),
+              ),
+              decoration: const BoxDecoration(color: primaryColor),
+            ),
+            sessionUser!['permissions'].contains('عرض الضباط')
+                ? drawerListTile(
+                    title: 'الضباط',
+                    icon: Icons.person,
+                    listStyle: listStyle,
+                    onTap: () => Get.toNamed('users'),
+                  )
+                : const SizedBox(),
+            sessionUser!['permissions'].contains('عرض اجمالي المخالفات')
+                ? drawerListTile(
+                    title: 'إجمالي المخالفات',
+                    icon: Icons.dangerous,
+                    listStyle: listStyle,
+                    onTap: () => Get.toNamed(
+                      'all-violations',
+                      arguments: {'title': 'إجمالي المخالفات'},
+                    ),
+                  )
+                : const SizedBox(),
+            sessionUser!['permissions'].contains('عرض عناوين المخالفات')
+                ? drawerListTile(
+                    title: 'عناوين المخالفات',
+                    icon: Icons.dangerous,
+                    listStyle: listStyle,
+                    onTap: () => Get.toNamed('violations'),
+                  )
+                : const SizedBox(),
+          ],
         ),
       ),
     );

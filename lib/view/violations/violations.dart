@@ -47,7 +47,7 @@ class _ViolationsState extends State<Violations> {
                         .contains('تعديل عناوين المخالفات'),
                     canDelete: sessionUser!['permissions']
                         .contains('حذف عناوين المخالفات'),
-                    unitViolationsFunction: () => false,
+                    onTap: () => false,
                     editFunction: () async {
                       var result =
                           await Get.toNamed('violation-edit', arguments: {
