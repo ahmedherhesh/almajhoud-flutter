@@ -23,6 +23,7 @@ class _UsersState extends State<Users> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(title: 'الضباط'),
+      drawer: const CustomDrawer(),
       body: FutureBuilder(
         future: API.get(path: 'users'),
         builder: (context, AsyncSnapshot snapshot) {

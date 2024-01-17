@@ -2,16 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/middleware/auth_middleware.dart';
-import 'package:flutter_almajhoud/middleware/check_permission_middleware.dart';
 import 'package:flutter_almajhoud/view/auth/change_password.dart';
 import 'package:flutter_almajhoud/view/auth/login.dart';
-import 'package:flutter_almajhoud/view/unit_violations/create.dart';
-import 'package:flutter_almajhoud/view/unit_violations/edit.dart';
-import 'package:flutter_almajhoud/view/unit_violations/unit_violations.dart';
-import 'package:flutter_almajhoud/view/unit_violations/units_violations.dart';
-import 'package:flutter_almajhoud/view/units/create.dart';
-import 'package:flutter_almajhoud/view/units/edit.dart';
-import 'package:flutter_almajhoud/view/units/units.dart';
 import 'package:flutter_almajhoud/view/users/create.dart';
 import 'package:flutter_almajhoud/view/users/edit.dart';
 import 'package:flutter_almajhoud/view/users/users.dart';
@@ -67,41 +59,6 @@ class MyApp extends StatelessWidget {
           name: '/login',
           page: () => const Login(),
           middlewares: [AuthMiddleware()],
-        ),
-        GetPage(
-          name: '/units',
-          page: () => const Units(),
-          middlewares: [],
-        ),
-        GetPage(
-          name: '/unit-create',
-          page: () => const CreateUnit(),
-          middlewares: [],
-        ),
-        GetPage(
-          name: '/unit-edit',
-          page: () => const EditUnit(),
-          middlewares: [],
-        ),
-        GetPage(
-          name: '/unit-violation-create',
-          page: () => const CreateUnitViolation(),
-          middlewares: [],
-        ),
-        GetPage(
-          name: '/unit-violation-update',
-          page: () => const EditUnitViolation(),
-          middlewares: [],
-        ),
-        GetPage(
-          name: '/unit-violations',
-          page: () => const UnitViolations(),
-          middlewares: [],
-        ),
-        GetPage(
-          name: '/units-violations',
-          page: () => const UnitsViolations(),
-          middlewares: [],
         ),
         GetPage(
           name: '/users',

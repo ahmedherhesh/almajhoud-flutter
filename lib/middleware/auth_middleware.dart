@@ -13,7 +13,7 @@ class AuthMiddleware extends GetMiddleware {
     if (sharedPreferences!.getString('user') != null) {
       sessionUser = userInfo!.isNotEmpty ? jsonDecode(userInfo) : {};
       if (sessionUser!['role'] == 'admin') {
-        return const RouteSettings(name: 'units');
+        return const RouteSettings(name: 'users');
       }
       if (sessionUser!['unit'] == null) {
         return customDialog(
