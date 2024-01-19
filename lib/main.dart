@@ -5,6 +5,8 @@ import 'package:flutter_almajhoud/middleware/auth_middleware.dart';
 import 'package:flutter_almajhoud/view/auth/change_password.dart';
 import 'package:flutter_almajhoud/view/auth/login.dart';
 import 'package:flutter_almajhoud/view/officer_violations/all_violations.dart';
+import 'package:flutter_almajhoud/view/officer_violations/create.dart';
+import 'package:flutter_almajhoud/view/officer_violations/edit.dart';
 import 'package:flutter_almajhoud/view/officer_violations/officer_violations.dart';
 import 'package:flutter_almajhoud/view/users/create.dart';
 import 'package:flutter_almajhoud/view/users/edit.dart';
@@ -90,6 +92,16 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/officer-violations',
           page: () => const OfficerViolations(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/create-officer-violation',
+          page: () => const CreateOfficerViolation(),
+          middlewares: [],
+        ),
+        GetPage(
+          name: '/edit-officer-violation',
+          page: () => const EditOfficerViolation(),
           middlewares: [],
         ),
         GetPage(

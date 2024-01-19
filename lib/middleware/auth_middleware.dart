@@ -15,16 +15,10 @@ class AuthMiddleware extends GetMiddleware {
       if (sessionUser!['role'] == 'admin') {
         return const RouteSettings(name: 'users');
       }
-      if (sessionUser!['unit'] == null) {
-        return customDialog(
-            title: 'عفوا انت لست رئيس لأي وحدة',
-            middleText: 'برجاء الرجوع للأدمن في ذلك');
-      }
       return RouteSettings(
-        name: 'unit-violations',
+        name: 'officer-violations',
         arguments: {
-          'unit_id': sessionUser!['unit']['id'],
-          'title': sessionUser!['unit']['title'],
+          'user_id': sessionUser!['id'],
         },
       );
     }

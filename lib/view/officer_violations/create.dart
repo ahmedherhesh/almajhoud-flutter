@@ -6,22 +6,21 @@ import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
-class CreateUnitViolation extends StatefulWidget {
-  const CreateUnitViolation({super.key});
+class CreateOfficerViolation extends StatefulWidget {
+  const CreateOfficerViolation({super.key});
 
   @override
-  State<CreateUnitViolation> createState() => _CreateUnitViolationState();
+  State<CreateOfficerViolation> createState() => _CreateOfficerViolationState();
 }
 
-class _CreateUnitViolationState extends State<CreateUnitViolation> {
+class _CreateOfficerViolationState extends State<CreateOfficerViolation> {
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   String? title;
-  Map args = Get.arguments;
   Map request = {};
   create() async {
     var formValid = formState.currentState!.validate();
     if (formValid) {
-      var response = await API.post(path: 'unit-violations', body: request);
+      var response = await API.post(path: 'officer-violations', body: request);
       if (response['status'] == 200) {
         Get.back(result: 1);
       }
@@ -30,14 +29,12 @@ class _CreateUnitViolationState extends State<CreateUnitViolation> {
 
   @override
   void initState() {
-    checkPermission('اضافة مخالفات الوحدات');
-
+    checkPermission('اضافة مخالفات');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    request['unit_id'] = args['unit_id'];
     return Scaffold(
       appBar: appBar(title: 'تسجيل مخالفة'),
       body: Container(

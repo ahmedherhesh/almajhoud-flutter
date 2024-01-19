@@ -6,14 +6,14 @@ import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 
-class EditUnitViolation extends StatefulWidget {
-  const EditUnitViolation({super.key});
+class EditOfficerViolation extends StatefulWidget {
+  const EditOfficerViolation({super.key});
 
   @override
-  State<EditUnitViolation> createState() => _EditUnitViolationState();
+  State<EditOfficerViolation> createState() => _EditOfficerViolationState();
 }
 
-class _EditUnitViolationState extends State<EditUnitViolation> {
+class _EditOfficerViolationState extends State<EditOfficerViolation> {
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   String? title;
   Map args = Get.arguments;
@@ -22,7 +22,7 @@ class _EditUnitViolationState extends State<EditUnitViolation> {
     var formValid = formState.currentState!.validate();
     if (formValid) {
       var response = await API.put(
-          path: 'unit-violations/${args['violation_id']}', body: request);
+          path: 'officer-violations/${args['violation_id']}', body: request);
       if (response['status'] == 200) {
         Get.back(result: 1);
       }
@@ -31,8 +31,7 @@ class _EditUnitViolationState extends State<EditUnitViolation> {
 
   @override
   void initState() {
-    checkPermission('تعديل مخالفات الوحدات');
-    request['unit_id'] = args['unit_id'];
+    checkPermission('تعديل مخالفات');
     request['count'] = args['count'];
     super.initState();
   }

@@ -100,10 +100,10 @@ class _OfficerViolationsState extends State<OfficerViolations> {
                   return const CustomProgressIndicator();
                 }
                 if (data.isNotEmpty) {
-                  bool canEdit = sessionUser!['permissions']
-                      .contains('تعديل مخالفات الوحدات');
-                  bool canDelete = sessionUser!['permissions']
-                      .contains('حذف مخالفات الوحدات');
+                  bool canEdit =
+                      sessionUser!['permissions'].contains('تعديل مخالفات');
+                  bool canDelete =
+                      sessionUser!['permissions'].contains('حذف مخالفات');
                   return ListView(
                     padding: const EdgeInsets.all(16),
                     children: [
@@ -181,15 +181,13 @@ class _OfficerViolationsState extends State<OfficerViolations> {
                                               children: [
                                                 sessionUser!['permissions']
                                                         .contains(
-                                                            'تعديل مخالفات الوحدات')
+                                                            'تعديل مخالفات')
                                                     ? IconButton(
                                                         onPressed: () async {
                                                           var result =
                                                               await Get.toNamed(
-                                                            'unit-violation-update',
+                                                            'edit-officer-violation',
                                                             arguments: {
-                                                              'unit_id':
-                                                                  '${args['unit_id']}',
                                                               'violation_id':
                                                                   '${el['id']}',
                                                               'count':
@@ -206,8 +204,7 @@ class _OfficerViolationsState extends State<OfficerViolations> {
                                                       )
                                                     : const SizedBox(),
                                                 sessionUser!['permissions']
-                                                        .contains(
-                                                            'حذف مخالفات الوحدات')
+                                                        .contains('حذف مخالفات')
                                                     ? IconButton(
                                                         onPressed: () async {
                                                           customDialog(
@@ -218,7 +215,7 @@ class _OfficerViolationsState extends State<OfficerViolations> {
                                                               var response =
                                                                   await API.delete(
                                                                       path:
-                                                                          'unit-violations/${el['id']}');
+                                                                          'officer-violations/${el['id']}');
                                                               if (response[
                                                                       'status'] ==
                                                                   200) {
@@ -241,8 +238,9 @@ class _OfficerViolationsState extends State<OfficerViolations> {
                                             '---',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                   ],
                                 );
@@ -265,7 +263,7 @@ class _OfficerViolationsState extends State<OfficerViolations> {
               ? FloatingActionButton(
                   onPressed: () async {
                     var result = await Get.toNamed(
-                      'officer-violation-create',
+                      'create-officer-violation',
                     );
                     if (result == 1) setState(() {});
                   },
