@@ -15,8 +15,14 @@ class AllViolations extends StatefulWidget {
 class _AllViolationsState extends State<AllViolations> {
   var args = Get.arguments;
   Map request = {'from': '', 'to': ''};
+  List<dynamic> violations = [];
+  void getViolations() async {
+    violations = await API.get(path: 'violations');
+  }
+
   @override
   void initState() {
+    getViolations();
     checkPermission('عرض اجمالي المخالفات');
     super.initState();
   }
@@ -30,56 +36,68 @@ class _AllViolationsState extends State<AllViolations> {
           Container(
             margin: const EdgeInsets.only(top: 30),
             padding: const EdgeInsets.only(right: 20, left: 20),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Column(
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    child: DateTimeFormField(
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(8),
-                        hintStyle: TextStyle(color: Colors.black45),
-                        errorStyle: TextStyle(color: Colors.redAccent),
-                        border: OutlineInputBorder(),
-                        suffixIcon: Icon(Icons.event_note),
-                        labelText: 'من تاريخ',
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: DateTimeFormField(
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.all(8),
+                            hintStyle: TextStyle(color: Colors.black45),
+                            errorStyle: TextStyle(color: Colors.redAccent),
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.event_note),
+                            labelText: 'من تاريخ',
+                          ),
+                          mode: DateTimeFieldPickerMode.date,
+                          autovalidateMode: AutovalidateMode.always,
+                          onDateSelected: (DateTime value) {
+                            String val = "$value".split(' ')[0];
+                            request['from'] = val;
+                            setState(() => request);
+                          },
+                        ),
                       ),
-                      mode: DateTimeFieldPickerMode.date,
-                      autovalidateMode: AutovalidateMode.always,
-                      onDateSelected: (DateTime value) {
-                        String val = "$value".split(' ')[0];
-                        request['from'] = val;
-                        setState(() => request);
-                      },
                     ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    child: DateTimeFormField(
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(8),
-                        hintStyle: TextStyle(color: Colors.black45),
-                        errorStyle: TextStyle(color: Colors.redAccent),
-                        border: OutlineInputBorder(),
-                        suffixIcon: Icon(Icons.event_note),
-                        labelText: 'إلى تاريخ',
+                    const SizedBox(width: 10),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        child: DateTimeFormField(
+                          decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.all(8),
+                            hintStyle: TextStyle(color: Colors.black45),
+                            errorStyle: TextStyle(color: Colors.redAccent),
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.event_note),
+                            labelText: 'إلى تاريخ',
+                          ),
+                          mode: DateTimeFieldPickerMode.date,
+                          autovalidateMode: AutovalidateMode.always,
+                          onDateSelected: (DateTime value) {
+                            String val = "$value".split(' ')[0];
+                            request['to'] = val;
+                            setState(() => request);
+                          },
+                        ),
                       ),
-                      mode: DateTimeFieldPickerMode.date,
-                      autovalidateMode: AutovalidateMode.always,
-                      onDateSelected: (DateTime value) {
-                        String val = "$value".split(' ')[0];
-                        request['to'] = val;
-                        setState(() => request);
-                      },
                     ),
-                  ),
+                  ],
                 ),
+                violations.isNotEmpty
+                    ? CustomMultiSelect(
+                        title: 'المخالفات',
+                        data: violations,
+                        initialValue: [],
+                        onConfirm: (results) {},
+                      )
+                    : const SizedBox()
               ],
             ),
           ),

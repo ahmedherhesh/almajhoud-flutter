@@ -6,7 +6,6 @@ import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/functions.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 // import 'package:toggle_switch/toggle_switch.dart';
 
 import 'package:get/get.dart';
@@ -21,7 +20,7 @@ class EditUser extends StatefulWidget {
 class _EditUserState extends State<EditUser> {
   GlobalKey<FormState> formState = GlobalKey<FormState>();
   var args = Get.arguments;
-  Map data = {
+  Map formData = {
     'name': '',
     'email': '',
     'role': '',
@@ -33,7 +32,7 @@ class _EditUserState extends State<EditUser> {
     var formValid = formState.currentState!.validate();
     if (formValid) {
       var response =
-          await API.put(path: 'users/${args['user_id']}', body: data);
+          await API.put(path: 'users/${args['user_id']}', body: formData);
       if (response.containsKey('status') && response['status'] == 200) {
         Get.back(result: 1);
       }
@@ -49,11 +48,11 @@ class _EditUserState extends State<EditUser> {
   @override
   void initState() {
     checkPermission('تعديل الضباط');
-    data['name'] = args['name'].toString();
-    data['email'] = args['email'].toString();
-    data['role'] = args['role'].toString();
-    data['status'] = args['status'].toString();
-    data['permissions'] = args['permissions'];
+    formData['name'] = args['name'].toString();
+    formData['email'] = args['email'].toString();
+    formData['role'] = args['role'].toString();
+    formData['status'] = args['status'].toString();
+    formData['permissions'] = args['permissions'];
     permissions();
     super.initState();
   }
@@ -82,7 +81,7 @@ class _EditUserState extends State<EditUser> {
                   child: Column(
                     children: [
                       TextFormField(
-                        initialValue: data['name'],
+                        initialValue: formData['name'],
                         validator: (val) {
                           if (val.toString().length < 3) {
                             return 'اسم الضابط يجب أن يحتوى على ثلاثة أحرف أو أكثر';
@@ -98,11 +97,11 @@ class _EditUserState extends State<EditUser> {
                           ),
                         ),
                         onChanged: (val) {
-                          data['name'] = val.toString();
+                          formData['name'] = val.toString();
                         },
                       ),
                       TextFormField(
-                        initialValue: data['email'],
+                        initialValue: formData['email'],
                         validator: (value) =>
                             EmailValidator.validate(value.toString())
                                 ? null
@@ -116,11 +115,12 @@ class _EditUserState extends State<EditUser> {
                           ),
                         ),
                         onChanged: (val) {
-                          data['email'] = val.toString();
+                          formData['email'] = val.toString();
                         },
                       ),
                       DropdownButtonFormField(
-                        hint: Text(data['role'] == 'admin' ? 'أدمن' : 'مستخدم'),
+                        hint: Text(
+                            formData['role'] == 'admin' ? 'أدمن' : 'مستخدم'),
                         items: const [
                           DropdownMenuItem(
                             value: 'user',
@@ -132,12 +132,12 @@ class _EditUserState extends State<EditUser> {
                           ),
                         ],
                         onChanged: (val) {
-                          data['role'] = val.toString();
+                          formData['role'] = val.toString();
                         },
                       ),
                       DropdownButtonFormField(
-                        hint:
-                            Text(data['status'] == 'active' ? 'مفعل' : 'محظور'),
+                        hint: Text(
+                            formData['status'] == 'active' ? 'مفعل' : 'محظور'),
                         items: const [
                           DropdownMenuItem(
                             value: 'active',
@@ -149,42 +149,20 @@ class _EditUserState extends State<EditUser> {
                           ),
                         ],
                         onChanged: (val) {
-                          print(data['status']);
-                          data['status'] = val.toString();
+                          print(formData['status']);
+                          formData['status'] = val.toString();
                         },
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
+                        padding: const EdgeInsets.only(top: 4.0),
                         child: allPermissions.isNotEmpty
-                            ? MultiSelectDialogField(
-                                itemsTextStyle: const TextStyle(
-                                    fontSize: 16, fontFamily: 'Cairo'),
-                                selectedItemsTextStyle: const TextStyle(
-                                    fontSize: 16, fontFamily: 'Cairo'),
-                                items: List.generate(
-                                  allPermissions.length,
-                                  (index) => MultiSelectItem(
-                                    allPermissions[index],
-                                    allPermissions[index],
-                                  ),
-                                ),
-                                title: const Text("الصلاحيات"),
-                                selectedColor: primaryColor,
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                      bottom: BorderSide(color: Colors.grey)),
-                                ),
-                                buttonText: const Text(
-                                  "الصلاحيات",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
+                            ? CustomMultiSelect(
+                                title: 'الصلاحيات',
+                                data: allPermissions,
+                                initialValue: formData['permissions'],
                                 onConfirm: (results) {
-                                  data['permissions'] = results;
+                                  formData['permissions'] = results;
                                 },
-                                initialValue: data['permissions'],
                               )
                             : Container(
                                 width: double.infinity,
@@ -204,7 +182,8 @@ class _EditUserState extends State<EditUser> {
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          data['permissions'] = jsonEncode(data['permissions']);
+                          formData['permissions'] =
+                              jsonEncode(formData['permissions']);
                           edit();
                         },
                         style: ElevatedButton.styleFrom(
@@ -245,3 +224,4 @@ class _EditUserState extends State<EditUser> {
     );
   }
 }
+

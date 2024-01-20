@@ -3,6 +3,8 @@ import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 appBar({String? title, bool showTabBar = false, tabBar}) {
   return AppBar(
@@ -275,6 +277,67 @@ class CustomDrawer extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CustomMultiSelect extends StatelessWidget {
+  const CustomMultiSelect({
+    super.key,
+    required this.data,
+    required this.title,
+    required this.initialValue,
+    required this.onConfirm,
+  });
+
+  final List data;
+  final String title;
+  final Function onConfirm;
+  final List initialValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSelectDialogField(
+      cancelText: const Text('إلغاء'),
+      confirmText: const Text('موافق'),
+      searchHint: 'بحث',
+      searchHintStyle: const TextStyle(color: Colors.black),
+      searchTextStyle: const TextStyle(color: Colors.black),
+      searchIcon: const Icon(
+        Icons.search,
+        color: primaryColor,
+      ),
+      closeSearchIcon: const Icon(
+        Icons.close,
+        color: primaryColor,
+      ),
+      searchable: true,
+      itemsTextStyle: const TextStyle(fontSize: 16, fontFamily: 'Cairo'),
+      selectedItemsTextStyle:
+          const TextStyle(fontSize: 16, fontFamily: 'Cairo'),
+      items: List.generate(
+        data.length,
+        (index) => MultiSelectItem(
+          data[index],
+          data[index],
+        ),
+      ),
+      title: Text(title),
+      selectedColor: primaryColor,
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey)),
+      ),
+      buttonText: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 18,
+        ),
+      ),
+      onConfirm: (results) {
+        onConfirm(results);
+      },
+      initialValue: initialValue,
     );
   }
 }
