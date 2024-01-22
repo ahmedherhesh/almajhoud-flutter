@@ -57,177 +57,164 @@ class _CreateUserState extends State<CreateUser> {
       body: Container(
         margin: const EdgeInsets.only(top: 10),
         padding: const EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                border: Border.all(color: primaryColor),
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-              ),
-              child: Form(
-                key: formState,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      validator: (val) {
-                        if (val.toString().length < 3) {
-                          return 'اسم الضابط يجب أن يحتوى على ثلاثة أحرف أو أكثر';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: 'الإسم',
-                        contentPadding: EdgeInsets.only(top: 20, bottom: 20),
-                        labelStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onChanged: (val) {
-                        data['name'] = val.toString();
-                      },
-                    ),
-                    TextFormField(
-                      validator: (value) =>
-                          EmailValidator.validate(value.toString())
-                              ? null
-                              : "يرجى كتابة ايميل صحيح",
-                      decoration: const InputDecoration(
-                        labelText: 'الايميل',
-                        contentPadding: EdgeInsets.only(top: 20, bottom: 20),
-                        labelStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onChanged: (val) {
-                        data['email'] = val.toString();
-                      },
-                    ),
-                    TextFormField(
-                      validator: (val) {
-                        if (val.toString().length < 3) {
-                          return 'كلمة السر يجب أن تحتوى على 6 أحرف أو أكثر';
-                        }
-                        return null;
-                      },
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: 'كلمة السر',
-                        contentPadding: EdgeInsets.only(top: 20, bottom: 20),
-                        labelStyle: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onChanged: (val) {
-                        data['password'] = val.toString();
-                      },
-                    ),
-                    DropdownButtonFormField(
-                        hint: const Text('دور المستخدم'),
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'user',
-                            child: Text('مستخدم'),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  border: Border.all(color: primaryColor),
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Form(
+                  key: formState,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        validator: (val) {
+                          if (val.toString().length < 3) {
+                            return 'اسم الضابط يجب أن يحتوى على ثلاثة أحرف أو أكثر';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'الإسم',
+                          contentPadding: EdgeInsets.only(top: 20, bottom: 20),
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
-                          DropdownMenuItem(
-                            value: 'admin',
-                            child: Text('أدمن'),
-                          ),
-                        ],
+                        ),
                         onChanged: (val) {
-                          data['role'] = val.toString();
-                        }),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: allPermissions.isNotEmpty
-                          ? MultiSelectDialogField(
-                              itemsTextStyle: const TextStyle(
-                                  fontSize: 16, fontFamily: 'Cairo'),
-                              selectedItemsTextStyle: const TextStyle(
-                                  fontSize: 16, fontFamily: 'Cairo'),
-                              items: List.generate(
-                                allPermissions.length,
-                                (index) => MultiSelectItem(
-                                  allPermissions[index],
-                                  allPermissions[index],
-                                ),
-                              ),
-                              title: const Text("الصلاحيات"),
-                              selectedColor: primaryColor,
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(color: Colors.grey)),
-                              ),
-                              buttonText: const Text(
-                                "الصلاحيات",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              onConfirm: (results) {
-                                data['permissions'] = results;
-                              },
-                            )
-                          : Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.only(bottom: 8),
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(color: Colors.grey)),
-                              ),
-                              child: const Text(
-                                'الصلاحيات',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                              )),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        data['permissions'] = jsonEncode(data['permissions']);
-                        create();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.only(
-                          right: 40,
-                          left: 40,
-                          top: 10,
-                          bottom: 10,
-                        ),
+                          data['name'] = val.toString();
+                        },
                       ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.save,
-                            color: Colors.white,
+                      TextFormField(
+                        validator: (value) =>
+                            EmailValidator.validate(value.toString())
+                                ? null
+                                : "يرجى كتابة ايميل صحيح",
+                        decoration: const InputDecoration(
+                          labelText: 'الايميل',
+                          contentPadding: EdgeInsets.only(top: 20, bottom: 20),
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
-                          SizedBox(width: 10),
-                          Text(
-                            'حفظ',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                        ),
+                        onChanged: (val) {
+                          data['email'] = val.toString();
+                        },
+                      ),
+                      TextFormField(
+                        validator: (val) {
+                          if (val.toString().length < 3) {
+                            return 'كلمة السر يجب أن تحتوى على 6 أحرف أو أكثر';
+                          }
+                          return null;
+                        },
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelText: 'كلمة السر',
+                          contentPadding: EdgeInsets.only(top: 20, bottom: 20),
+                          labelStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onChanged: (val) {
+                          data['password'] = val.toString();
+                        },
+                      ),
+                      DropdownButtonFormField(
+                          hint: const Text('دور المستخدم'),
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'user',
+                              child: Text('مستخدم'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'admin',
+                              child: Text('أدمن'),
+                            ),
+                          ],
+                          onChanged: (val) {
+                            data['role'] = val.toString();
+                          }),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: allPermissions.isNotEmpty
+                            ? CustomMultiSelect(
+                                title: 'الصلاحيات',
+                                items: List.generate(allPermissions.length,
+                                    (index) {
+                                  return MultiSelectItem(
+                                    allPermissions[index],
+                                    allPermissions[index],
+                                  );
+                                }),
+                                initialValue: [],
+                                onConfirm: (results) {
+                                  data['permissions'] = results;
+                                },
+                              )
+                            : Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.only(bottom: 8),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(color: Colors.grey)),
+                                ),
+                                child: const Text(
+                                  'الصلاحيات',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    // fontWeight: FontWeight.bold,
+                                  ),
+                                )),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          data['permissions'] = jsonEncode(data['permissions']);
+                          create();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.only(
+                            right: 40,
+                            left: 40,
+                            top: 10,
+                            bottom: 10,
+                          ),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.save,
                               color: Colors.white,
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                            SizedBox(width: 10),
+                            Text(
+                              'حفظ',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

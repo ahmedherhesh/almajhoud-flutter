@@ -43,7 +43,7 @@ dependencies:
   dropdown_search: ^5.0.6
   multi_select_flutter: ^4.1.3
   email_validator: ^2.1.17
-  flutter_file_downloader: ^1.2.1
+  # permission_handler: ^11.2.0
   # lite_rolling_switch: ^1.0.1
   
 dev_dependencies:

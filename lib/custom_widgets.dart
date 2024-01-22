@@ -112,7 +112,7 @@ class CustomListTile extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.all(0),
         leading: Image.asset(
-          'assets/images/logo.png',
+          'assets/images/police.png',
           fit: BoxFit.cover,
         ),
         trailing: canEdit || canDelete

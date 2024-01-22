@@ -257,6 +257,7 @@ class _AllViolationsState extends State<AllViolations> {
           var file = File(path);
           var res = await get(Uri.parse(
               'http://www.shadowsphotography.co/wp-content/uploads/2017/12/photography-01-800x400.jpg'));
+          print(res);
           file.writeAsBytes(res.bodyBytes);
         },
         child: const Icon(
