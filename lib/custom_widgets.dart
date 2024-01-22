@@ -324,14 +324,20 @@ class CustomMultiSelect extends StatelessWidget {
         items: items,
         title: Text(title),
         selectedColor: primaryColor,
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey)),
+        decoration: BoxDecoration(
+          border: Border.all(
+            width: 1,
+            color: Colors.black,
+          ),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(5),
+          ),
         ),
         buttonText: Text(
           title,
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 18,
+            fontSize: 16,
           ),
         ),
         onConfirm: (results) {

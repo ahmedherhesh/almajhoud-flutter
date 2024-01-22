@@ -19,8 +19,9 @@ class OfficerViolations extends StatefulWidget {
 
 class _OfficerViolationsState extends State<OfficerViolations> {
   var args = Get.arguments;
-  Map request = {'from': '', 'to': '', 'inList': ''};
+  Map request = {'from': '', 'to': '', 'inList': '', 'notInList': ''};
   List initialValue = [];
+  List exceptInitialValue = [];
   var violations;
   void getViolations() async {
     violations = await API.get(path: 'violations');
@@ -98,22 +99,49 @@ class _OfficerViolationsState extends State<OfficerViolations> {
                   ],
                 ),
                 violations != null
-                    ? CustomMultiSelect(
-                        title: 'المخالفات',
-                        items:
-                            List.generate(violations['data'].length, (index) {
-                          return MultiSelectItem(
-                            violations['data'][index]['id'],
-                            violations['data'][index]['title'],
-                          );
-                        }),
-                        initialValue: initialValue,
-                        onConfirm: (results) {
-                          initialValue = results;
-                          request['inList'] = jsonEncode(results);
-                          setState(() => request);
-                          print(results);
-                        },
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: CustomMultiSelect(
+                              title: 'المخالفات',
+                              items: List.generate(violations['data'].length,
+                                  (index) {
+                                return MultiSelectItem(
+                                  violations['data'][index]['id'],
+                                  violations['data'][index]['title'],
+                                );
+                              }),
+                              initialValue: initialValue,
+                              onConfirm: (results) {
+                                initialValue = results;
+                                request['inList'] = jsonEncode(results);
+                                setState(() => request);
+                                print(results);
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: CustomMultiSelect(
+                              title: 'المخالفات ما عدا',
+                              items: List.generate(violations['data'].length,
+                                  (index) {
+                                return MultiSelectItem(
+                                  violations['data'][index]['id'],
+                                  violations['data'][index]['title'],
+                                );
+                              }),
+                              initialValue: exceptInitialValue,
+                              onConfirm: (results) {
+                                exceptInitialValue = results;
+                                request['notInList'] = jsonEncode(results);
+                                setState(() => request);
+                                print(results);
+                              },
+                            ),
+                          )
+                        ],
                       )
                     : const SizedBox()
               ],
@@ -123,7 +151,7 @@ class _OfficerViolationsState extends State<OfficerViolations> {
             child: FutureBuilder(
               future: API.get(
                 path:
-                    'users/${args['user_id']}?from=${request['from']}&to=${request['to']}&inList=${request['inList']}',
+                    'users/${args['user_id']}?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}',
               ),
               builder: (context, AsyncSnapshot snapshot) {
                 List data =
