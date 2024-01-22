@@ -9,6 +9,7 @@ import 'package:flutter_almajhoud/functions.dart';
 // import 'package:toggle_switch/toggle_switch.dart';
 
 import 'package:get/get.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class EditUser extends StatefulWidget {
   const EditUser({super.key});
@@ -149,7 +150,6 @@ class _EditUserState extends State<EditUser> {
                           ),
                         ],
                         onChanged: (val) {
-                          print(formData['status']);
                           formData['status'] = val.toString();
                         },
                       ),
@@ -158,7 +158,13 @@ class _EditUserState extends State<EditUser> {
                         child: allPermissions.isNotEmpty
                             ? CustomMultiSelect(
                                 title: 'الصلاحيات',
-                                data: allPermissions,
+                                items: List.generate(allPermissions.length,
+                                    (index) {
+                                  return MultiSelectItem(
+                                    allPermissions[index],
+                                    allPermissions[index],
+                                  );
+                                }),
                                 initialValue: formData['permissions'],
                                 onConfirm: (results) {
                                   formData['permissions'] = results;
@@ -224,4 +230,3 @@ class _EditUserState extends State<EditUser> {
     );
   }
 }
-

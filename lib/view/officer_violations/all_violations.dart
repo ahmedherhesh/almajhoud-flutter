@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
 import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class AllViolations extends StatefulWidget {
   const AllViolations({super.key});
@@ -15,10 +20,21 @@ class AllViolations extends StatefulWidget {
 class _AllViolationsState extends State<AllViolations> {
   var args = Get.arguments;
   Map request = {'from': '', 'to': ''};
-  List<dynamic> violations = [];
+  List initialValue = [];
+  var violations;
   void getViolations() async {
     violations = await API.get(path: 'violations');
+    setState(() => violations);
   }
+  void downloadFile() async {
+    var time = DateTime.now().millisecondsSinceEpoch;
+    var path = '/storage/emulated/0/Download/$time.jpg';
+    var file = File(path);
+    var res = await get(Uri.parse(
+        'http://www.shadowsphotography.co/wp-content/uploads/2017/12/photography-01-800x400.jpg'));
+    file.writeAsBytes(res.bodyBytes);
+  }
+
 
   @override
   void initState() {
@@ -90,12 +106,23 @@ class _AllViolationsState extends State<AllViolations> {
                     ),
                   ],
                 ),
-                violations.isNotEmpty
+                violations != null
                     ? CustomMultiSelect(
                         title: 'المخالفات',
-                        data: violations,
-                        initialValue: [],
-                        onConfirm: (results) {},
+                        items:
+                            List.generate(violations['data'].length, (index) {
+                          return MultiSelectItem(
+                            violations['data'][index]['id'],
+                            violations['data'][index]['title'],
+                          );
+                        }),
+                        initialValue: initialValue,
+                        onConfirm: (results) {
+                          initialValue = results;
+                          request['inList'] = jsonEncode(results);
+                          setState(() => request);
+                          print(results);
+                        },
                       )
                     : const SizedBox()
               ],
@@ -105,14 +132,15 @@ class _AllViolationsState extends State<AllViolations> {
             child: FutureBuilder(
               future: API.get(
                 path:
-                    'all-violations?from=${request['from']}&to=${request['to']}',
+                    'all-violations?from=${request['from']}&to=${request['to']}&inList=${request['inList']}',
               ),
               builder: (context, AsyncSnapshot snapshot) {
                 List data =
                     snapshot.hasData && snapshot.data.containsKey('data')
                         ? snapshot.data['data']
                         : [];
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                if (snapshot.connectionState == ConnectionState.waiting &&
+                    data.isEmpty) {
                   return const CustomProgressIndicator();
                 }
                 if (data.isNotEmpty) {
@@ -190,6 +218,20 @@ class _AllViolationsState extends State<AllViolations> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          var time = DateTime.now().millisecondsSinceEpoch;
+          var path = '/storage/emulated/0/Download/$time.jpg';
+          var file = File(path);
+          var res = await get(Uri.parse(
+              'http://www.shadowsphotography.co/wp-content/uploads/2017/12/photography-01-800x400.jpg'));
+          file.writeAsBytes(res.bodyBytes);
+        },
+        child: const Icon(
+          Icons.download,
+          color: Colors.white,
+        ),
       ),
     );
   }

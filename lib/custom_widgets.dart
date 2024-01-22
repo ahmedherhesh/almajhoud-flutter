@@ -284,60 +284,61 @@ class CustomDrawer extends StatelessWidget {
 class CustomMultiSelect extends StatelessWidget {
   const CustomMultiSelect({
     super.key,
-    required this.data,
+    required this.items,
     required this.title,
     required this.initialValue,
     required this.onConfirm,
   });
 
-  final List data;
+  final List<MultiSelectItem> items;
   final String title;
   final Function onConfirm;
   final List initialValue;
 
   @override
   Widget build(BuildContext context) {
-    return MultiSelectDialogField(
-      cancelText: const Text('إلغاء'),
-      confirmText: const Text('موافق'),
-      searchHint: 'بحث',
-      searchHintStyle: const TextStyle(color: Colors.black),
-      searchTextStyle: const TextStyle(color: Colors.black),
-      searchIcon: const Icon(
-        Icons.search,
-        color: primaryColor,
-      ),
-      closeSearchIcon: const Icon(
-        Icons.close,
-        color: primaryColor,
-      ),
-      searchable: true,
-      itemsTextStyle: const TextStyle(fontSize: 16, fontFamily: 'Cairo'),
-      selectedItemsTextStyle:
-          const TextStyle(fontSize: 16, fontFamily: 'Cairo'),
-      items: List.generate(
-        data.length,
-        (index) => MultiSelectItem(
-          data[index],
-          data[index],
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: MultiSelectDialogField(
+        cancelText: const Text('إلغاء'),
+        confirmText: const Text('موافق'),
+        searchHint: 'بحث',
+        searchHintStyle: const TextStyle(color: Colors.black),
+        searchTextStyle: const TextStyle(color: Colors.black),
+        chipDisplay: MultiSelectChipDisplay(
+          alignment: Alignment.topRight,
+          chipWidth: 40,
         ),
-      ),
-      title: Text(title),
-      selectedColor: primaryColor,
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey)),
-      ),
-      buttonText: Text(
-        title,
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 18,
+        searchIcon: const Icon(
+          Icons.search,
+          color: primaryColor,
         ),
+        closeSearchIcon: const Icon(
+          Icons.close,
+          color: primaryColor,
+        ),
+        searchable: true,
+        itemsTextStyle: const TextStyle(fontSize: 16, fontFamily: 'Cairo'),
+        selectedItemsTextStyle:
+            const TextStyle(fontSize: 16, fontFamily: 'Cairo'),
+        items: items,
+        title: Text(title),
+        selectedColor: primaryColor,
+        decoration: const BoxDecoration(
+          border: Border(bottom: BorderSide(color: Colors.grey)),
+        ),
+        buttonText: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+          ),
+        ),
+        onConfirm: (results) {
+          onConfirm(results);
+        },
+        initialValue: initialValue,
       ),
-      onConfirm: (results) {
-        onConfirm(results);
-      },
-      initialValue: initialValue,
     );
   }
 }
