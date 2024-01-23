@@ -42,7 +42,6 @@ class _ViolationsState extends State<Violations> {
                   var violation = data[index];
                   return CustomListTile(
                     title: '${violation['title']}',
-                    subTitle: '',
                     canEdit: sessionUser!['permissions']
                         .contains('تعديل عناوين المخالفات'),
                     canDelete: sessionUser!['permissions']
