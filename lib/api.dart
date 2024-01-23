@@ -10,7 +10,12 @@ class API {
     'Authorization': 'Bearer ${sessionUser!['token']}'
   };
   static bool loading = true;
-  static response({response, bool showDialog = true}) {
+  static response({
+    response,
+    bool showDialog = true,
+    bool cached = false,
+    String? path,
+  }) {
     if (response.statusCode >= 500) {
       if (showDialog) {
         customDialog(
@@ -27,8 +32,20 @@ class API {
       }
     }
     // if (response.statusCode != 200) return {'status': response.statusCode};
+    //Data cached or reget
+    var body;
+    if (cached &&
+        response.statusCode == 200 &&
+        response.body.contains('data')) {
+      sharedPreferences!.setString('$path', response.body);
+      String? dataOfCached = sharedPreferences!.getString('$path');
+      if (dataOfCached != null && !cached) {
+        body = jsonDecode(dataOfCached);
+      } else {
+        body = jsonDecode(response.body);
+      }
+    }
 
-    var body = jsonDecode(response.body);
     if (response.statusCode == 422) {
       String text = validationMsgs(response.body);
       if (showDialog) {
@@ -40,13 +57,20 @@ class API {
     } else if (body['status'] == 403) {
       if (showDialog) customDialog(title: 'تنبيه', middleText: body['msg']);
     }
+
     return body;
   }
 
-  static Future get({String? path, bool showDialog = true}) async {
+  static Future get(
+      {String? path, bool showDialog = true, bool cached = false}) async {
     var url = Uri.parse('${API.url}/$path');
     var response = await http.get(url, headers: headers);
-    return API.response(response: response, showDialog: showDialog);
+    return API.response(
+      response: response,
+      showDialog: showDialog,
+      path: path,
+      cached: cached,
+    );
   }
 
   static Future post({String? path, Map? body, bool showDialog = true}) async {
