@@ -119,39 +119,55 @@ class _EditUserState extends State<EditUser> {
                           formData['email'] = val.toString();
                         },
                       ),
-                      DropdownButtonFormField(
-                        hint: Text(
-                            formData['role'] == 'admin' ? 'أدمن' : 'مستخدم'),
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'user',
-                            child: Text('مستخدم'),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30),
+                        child: DropdownButtonFormField(
+                          hint: Text(
+                            formData['role'] == 'admin' ? 'أدمن' : 'مستخدم',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
                           ),
-                          DropdownMenuItem(
-                            value: 'admin',
-                            child: Text('أدمن'),
-                          ),
-                        ],
-                        onChanged: (val) {
-                          formData['role'] = val.toString();
-                        },
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'user',
+                              child: Text('مستخدم'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'admin',
+                              child: Text('أدمن'),
+                            ),
+                          ],
+                          onChanged: (val) {
+                            formData['role'] = val.toString();
+                          },
+                        ),
                       ),
-                      DropdownButtonFormField(
-                        hint: Text(
-                            formData['status'] == 'active' ? 'مفعل' : 'محظور'),
-                        items: const [
-                          DropdownMenuItem(
-                            value: 'active',
-                            child: Text('تفعيل'),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30, bottom: 10),
+                        child: DropdownButtonFormField(
+                          hint: Text(
+                            formData['status'] == 'active' ? 'مفعل' : 'محظور',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
                           ),
-                          DropdownMenuItem(
-                            value: 'block',
-                            child: Text('حظر'),
-                          ),
-                        ],
-                        onChanged: (val) {
-                          formData['status'] = val.toString();
-                        },
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'active',
+                              child: Text('تفعيل'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'block',
+                              child: Text('حظر'),
+                            ),
+                          ],
+                          onChanged: (val) {
+                            formData['status'] = val.toString();
+                          },
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 4.0),

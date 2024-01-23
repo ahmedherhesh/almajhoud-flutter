@@ -84,7 +84,7 @@ class _CreateUserState extends State<CreateUser> {
                           labelText: 'الإسم',
                           contentPadding: EdgeInsets.only(top: 20, bottom: 20),
                           labelStyle: TextStyle(
-                            fontSize: 20,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -101,7 +101,7 @@ class _CreateUserState extends State<CreateUser> {
                           labelText: 'الايميل',
                           contentPadding: EdgeInsets.only(top: 20, bottom: 20),
                           labelStyle: TextStyle(
-                            fontSize: 20,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -121,7 +121,7 @@ class _CreateUserState extends State<CreateUser> {
                           labelText: 'كلمة السر',
                           contentPadding: EdgeInsets.only(top: 20, bottom: 20),
                           labelStyle: TextStyle(
-                            fontSize: 20,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -129,8 +129,16 @@ class _CreateUserState extends State<CreateUser> {
                           data['password'] = val.toString();
                         },
                       ),
-                      DropdownButtonFormField(
-                          hint: const Text('دور المستخدم'),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30, bottom: 10),
+                        child: DropdownButtonFormField(
+                          hint: const Text(
+                            'دور المستخدم',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
                           items: const [
                             DropdownMenuItem(
                               value: 'user',
@@ -143,7 +151,9 @@ class _CreateUserState extends State<CreateUser> {
                           ],
                           onChanged: (val) {
                             data['role'] = val.toString();
-                          }),
+                          },
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: allPermissions.isNotEmpty
