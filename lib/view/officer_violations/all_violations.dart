@@ -253,8 +253,8 @@ class _AllViolationsState extends State<AllViolations> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          var time = DateTime.now();
-          var path = '/storage/emulated/0/Download/$time.pdf';
+          var now = DateTime.now();
+          var path = '/storage/emulated/0/Download/$now.pdf';
           var file = File(path);
           var res = await get(
               Uri.parse(
