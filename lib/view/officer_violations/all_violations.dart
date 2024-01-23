@@ -5,6 +5,7 @@ import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_almajhoud/api.dart';
 import 'package:flutter_almajhoud/custom_widgets.dart';
+import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
@@ -252,13 +253,14 @@ class _AllViolationsState extends State<AllViolations> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          var time = DateTime.now().millisecondsSinceEpoch;
-          var path = '/storage/emulated/0/Download/$time.jpg';
+          var time = DateTime.now();
+          var path = '/storage/emulated/0/Download/$time.pdf';
           var file = File(path);
-          var res = await get(Uri.parse(
-              'http://www.shadowsphotography.co/wp-content/uploads/2017/12/photography-01-800x400.jpg'));
-          print(res);
-          file.writeAsBytes(res.bodyBytes);
+          var res = await get(
+              Uri.parse(
+                  '${mainUrl}/all-violations?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}'),
+              headers: {'Authorization': 'Bearer ${sessionUser!['token']}'});
+          await file.writeAsBytes(res.bodyBytes);
         },
         child: const Icon(
           Icons.download,
