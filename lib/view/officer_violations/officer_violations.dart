@@ -19,7 +19,13 @@ class OfficerViolations extends StatefulWidget {
 
 class _OfficerViolationsState extends State<OfficerViolations> {
   var args = Get.arguments;
-  Map request = {'from': '', 'to': '', 'inList': '', 'notInList': ''};
+  Map request = {
+    'from': '',
+    'to': '',
+    'inList': '',
+    'notInList': '',
+    'inUsers': ''
+  };
   List initialValue = [];
   List exceptInitialValue = [];
   var violations;
@@ -147,177 +153,197 @@ class _OfficerViolationsState extends State<OfficerViolations> {
               ],
             ),
           ),
-          Expanded(
-            child: FutureBuilder(
-              future: API.get(
-                path:
-                    'users/${args['user_id']}?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}',
-              ),
-              builder: (context, AsyncSnapshot snapshot) {
-                List data =
-                    snapshot.hasData && snapshot.data.containsKey('data')
-                        ? snapshot.data['data']
-                        : [];
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CustomProgressIndicator();
-                }
-                if (data.isNotEmpty) {
-                  bool canEdit =
-                      sessionUser!['permissions'].contains('تعديل مخالفات');
-                  bool canDelete =
-                      sessionUser!['permissions'].contains('حذف مخالفات');
-                  return ListView(
-                    padding: const EdgeInsets.all(16),
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          // boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 6)],
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        child: Table(
-                          border: TableBorder.all(
-                            color: Colors.grey,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(8)),
-                          ),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.top,
+          violations != null
+              ? Expanded(
+                  child: FutureBuilder(
+                    future: API.get(
+                      path:
+                          'users/${args['user_id']}?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}',
+                    ),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      List data =
+                          snapshot.hasData && snapshot.data.containsKey('data')
+                              ? snapshot.data['data']
+                              : [];
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CustomProgressIndicator();
+                      }
+                      if (data.isNotEmpty) {
+                        bool canEdit = sessionUser!['permissions']
+                            .contains('تعديل مخالفات');
+                        bool canDelete =
+                            sessionUser!['permissions'].contains('حذف مخالفات');
+                        return ListView(
+                          padding: const EdgeInsets.all(16),
                           children: [
-                            const TableRow(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(12),
-                                  child: Text(
-                                    'المخالفة',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 20),
-                                  ),
+                            Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                // boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 6)],
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                              ),
+                              child: Table(
+                                border: TableBorder.all(
+                                  color: Colors.grey,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8)),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.all(12),
-                                  child: Text(
-                                    'العدد',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.all(12),
-                                  child: Text(
-                                    '',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            ...List.generate(
-                              data.length,
-                              (index) {
-                                var el = data[index];
-                                return TableRow(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: Text(
-                                        '${el['violation']}',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(fontSize: 20),
+                                defaultVerticalAlignment:
+                                    TableCellVerticalAlignment.top,
+                                children: [
+                                  const TableRow(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(12),
+                                        child: Text(
+                                          'المخالفة',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 20),
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(12),
-                                      child: Text(
-                                        '${el['count']}',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(fontSize: 20),
+                                      Padding(
+                                        padding: EdgeInsets.all(12),
+                                        child: Text(
+                                          'العدد',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 20),
+                                        ),
                                       ),
-                                    ),
-                                    canEdit || canDelete
-                                        ? Padding(
+                                      Padding(
+                                        padding: EdgeInsets.all(12),
+                                        child: Text(
+                                          '',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  ...List.generate(
+                                    data.length,
+                                    (index) {
+                                      var el = data[index];
+                                      return TableRow(
+                                        children: [
+                                          Padding(
                                             padding: const EdgeInsets.all(12),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                sessionUser!['permissions']
-                                                        .contains(
-                                                            'تعديل مخالفات')
-                                                    ? IconButton(
-                                                        onPressed: () async {
-                                                          var result =
-                                                              await Get.toNamed(
-                                                            'edit-officer-violation',
-                                                            arguments: {
-                                                              'violation_id':
-                                                                  '${el['id']}',
-                                                              'count':
-                                                                  '${el['count']}',
-                                                            },
-                                                          );
-                                                          if (result == 1)
-                                                            setState(() {});
-                                                        },
-                                                        icon: const Icon(
-                                                          Icons.edit_square,
-                                                          color: primaryColor,
-                                                        ),
-                                                      )
-                                                    : const SizedBox(),
-                                                sessionUser!['permissions']
-                                                        .contains('حذف مخالفات')
-                                                    ? IconButton(
-                                                        onPressed: () async {
-                                                          customDialog(
-                                                            title: 'تحذير',
-                                                            middleText:
-                                                                'هل انت متأكد من حذف هذه المخالفة',
-                                                            confirm: () async {
-                                                              var response =
-                                                                  await API.delete(
-                                                                      path:
-                                                                          'officer-violations/${el['id']}');
-                                                              if (response[
-                                                                      'status'] ==
-                                                                  200) {
-                                                                setState(() {});
-                                                                Get.back();
-                                                              }
-                                                            },
-                                                          );
-                                                        },
-                                                        icon: const Icon(
-                                                          Icons.delete,
-                                                          color: primaryColor,
-                                                        ),
-                                                      )
-                                                    : const SizedBox(),
-                                              ],
-                                            ),
-                                          )
-                                        : const Text(
-                                            '---',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
+                                            child: Text(
+                                              '${el['violation']}',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  const TextStyle(fontSize: 20),
                                             ),
                                           ),
-                                  ],
-                                );
-                              },
+                                          Padding(
+                                            padding: const EdgeInsets.all(12),
+                                            child: Text(
+                                              '${el['count']}',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  const TextStyle(fontSize: 20),
+                                            ),
+                                          ),
+                                          canEdit || canDelete
+                                              ? Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(12),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      sessionUser![
+                                                                  'permissions']
+                                                              .contains(
+                                                                  'تعديل مخالفات')
+                                                          ? IconButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                var result =
+                                                                    await Get
+                                                                        .toNamed(
+                                                                  'edit-officer-violation',
+                                                                  arguments: {
+                                                                    'violation_id':
+                                                                        '${el['id']}',
+                                                                    'count':
+                                                                        '${el['count']}',
+                                                                  },
+                                                                );
+                                                                if (result == 1)
+                                                                  setState(
+                                                                      () {});
+                                                              },
+                                                              icon: const Icon(
+                                                                Icons
+                                                                    .edit_square,
+                                                                color:
+                                                                    primaryColor,
+                                                              ),
+                                                            )
+                                                          : const SizedBox(),
+                                                      sessionUser![
+                                                                  'permissions']
+                                                              .contains(
+                                                                  'حذف مخالفات')
+                                                          ? IconButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                customDialog(
+                                                                  title:
+                                                                      'تحذير',
+                                                                  middleText:
+                                                                      'هل انت متأكد من حذف هذه المخالفة',
+                                                                  confirm:
+                                                                      () async {
+                                                                    var response =
+                                                                        await API.delete(
+                                                                            path:
+                                                                                'officer-violations/${el['id']}');
+                                                                    if (response[
+                                                                            'status'] ==
+                                                                        200) {
+                                                                      setState(
+                                                                          () {});
+                                                                      Get.back();
+                                                                    }
+                                                                  },
+                                                                );
+                                                              },
+                                                              icon: const Icon(
+                                                                Icons.delete,
+                                                                color:
+                                                                    primaryColor,
+                                                              ),
+                                                            )
+                                                          : const SizedBox(),
+                                                    ],
+                                                  ),
+                                                )
+                                              : const Text(
+                                                  '---',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                        ],
+                                      );
+                                    },
+                                  )
+                                ],
+                              ),
                             )
                           ],
-                        ),
-                      )
-                    ],
-                  );
-                }
-                return const SizedBox();
-              },
-            ),
-          ),
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+                )
+              : const SizedBox()
         ],
       ),
       floatingActionButton:

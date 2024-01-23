@@ -23,7 +23,12 @@ class _AllViolationsState extends State<AllViolations> {
   Map request = {'from': '', 'to': ''};
   List initialValue = [];
   List exceptInitialValue = [];
-  var violations;
+  var violations, users;
+  void getUsers() async {
+    users = await API.get(path: 'user-names');
+    setState(() => users);
+  }
+
   void getViolations() async {
     violations = await API.get(path: 'violations');
     setState(() => violations);
@@ -40,6 +45,7 @@ class _AllViolationsState extends State<AllViolations> {
 
   @override
   void initState() {
+    getUsers();
     getViolations();
     checkPermission('عرض اجمالي المخالفات');
     super.initState();
@@ -110,11 +116,12 @@ class _AllViolationsState extends State<AllViolations> {
                       ),
                     ],
                   ),
-                  violations != null
+                  violations != null && users != null
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
+                              flex: 1,
                               child: CustomMultiSelect(
                                 title: 'المخالفات',
                                 items: List.generate(violations['data'].length,
@@ -129,19 +136,20 @@ class _AllViolationsState extends State<AllViolations> {
                                   initialValue = results;
                                   request['inList'] = jsonEncode(results);
                                   setState(() => request);
-                                  print(results);
                                 },
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 5),
                             Expanded(
+                              flex: 1,
                               child: CustomMultiSelect(
-                                title: 'المخالفات ما عدا',
+                                title: 'ما عدا',
                                 items: List.generate(violations['data'].length,
                                     (index) {
+                                  var el = violations['data'][index];
                                   return MultiSelectItem(
-                                    violations['data'][index]['id'],
-                                    violations['data'][index]['title'],
+                                    el['id'],
+                                    el['title'],
                                   );
                                 }),
                                 initialValue: exceptInitialValue,
@@ -149,7 +157,29 @@ class _AllViolationsState extends State<AllViolations> {
                                   exceptInitialValue = results;
                                   request['notInList'] = jsonEncode(results);
                                   setState(() => request);
-                                  print(results);
+                                },
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Expanded(
+                              flex: 1,
+                              child: CustomMultiSelect(
+                                title: 'الضباط',
+                                items: List.generate(
+                                  users['data'].length,
+                                  (index) {
+                                    var el = users['data'][index];
+                                    return MultiSelectItem(
+                                      el['id'],
+                                      el['name'],
+                                    );
+                                  },
+                                ),
+                                initialValue: exceptInitialValue,
+                                onConfirm: (results) {
+                                  exceptInitialValue = results;
+                                  request['inUsers'] = jsonEncode(results);
+                                  setState(() => request);
                                 },
                               ),
                             )
@@ -164,7 +194,7 @@ class _AllViolationsState extends State<AllViolations> {
             child: FutureBuilder(
               future: API.get(
                 path:
-                    'all-violations?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}',
+                    'all-violations?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}&inUsers=${request['inUsers']}',
               ),
               builder: (context, AsyncSnapshot snapshot) {
                 List data =
@@ -257,9 +287,10 @@ class _AllViolationsState extends State<AllViolations> {
           var path = '/storage/emulated/0/Download/$now.pdf';
           var file = File(path);
           var res = await get(
-              Uri.parse(
-                  '${mainUrl}/all-violations?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}'),
-              headers: {'Authorization': 'Bearer ${sessionUser!['token']}'});
+            Uri.parse(
+                '$mainUrl/all-violations?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}&inUsers=${request['inUsers']}'),
+            headers: {'Authorization': 'Bearer ${sessionUser!['token']}'},
+          );
           await file.writeAsBytes(res.bodyBytes);
         },
         child: const Icon(
