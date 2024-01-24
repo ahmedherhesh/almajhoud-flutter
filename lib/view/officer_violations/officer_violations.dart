@@ -55,7 +55,7 @@ class _OfficerViolationsState extends State<OfficerViolations> {
       },
       child: Scaffold(
         appBar: appBar(
-          title: args['title'],
+          title: args['title'] ?? sessionUser!['name'],
           onRefresh: () async {
             onRefresh();
           },
@@ -174,7 +174,7 @@ class _OfficerViolationsState extends State<OfficerViolations> {
                     child: FutureBuilder(
                       future: API.get(
                         path:
-                            'users/${args['user_id']}?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}',
+                            'users/${args['user_id'] ?? sessionUser!['id']}?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}',
                       ),
                       builder: (context, AsyncSnapshot snapshot) {
                         List data = snapshot.hasData &&
@@ -183,7 +183,7 @@ class _OfficerViolationsState extends State<OfficerViolations> {
                             : [];
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return  CustomProgressIndicator();
+                          return CustomProgressIndicator();
                         }
                         if (data.isNotEmpty) {
                           bool canEdit = sessionUser!['permissions']
