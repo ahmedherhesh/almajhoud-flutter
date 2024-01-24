@@ -183,7 +183,7 @@ class _OfficerViolationsState extends State<OfficerViolations> {
                             : [];
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CustomProgressIndicator();
+                          return  CustomProgressIndicator();
                         }
                         if (data.isNotEmpty) {
                           bool canEdit = sessionUser!['permissions']

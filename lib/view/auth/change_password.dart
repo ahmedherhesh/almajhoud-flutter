@@ -125,7 +125,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       child: Directionality(
                         textDirection: TextDirection.ltr,
                         child: AsyncButtonBuilder(
-                          loadingWidget: const CustomProgressIndicator(),
+                          loadingWidget:  CustomProgressIndicator(),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,

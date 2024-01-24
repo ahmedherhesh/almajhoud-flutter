@@ -38,7 +38,7 @@ class _UsersState extends State<Users> {
                 ? snapshot.data['data']
                 : [];
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CustomProgressIndicator();
+              return  CustomProgressIndicator();
             }
             if (data.isNotEmpty) {
               return ListView(

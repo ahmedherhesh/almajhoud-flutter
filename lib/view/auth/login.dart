@@ -126,7 +126,9 @@ class _LoginState extends State<Login> {
                       child: Directionality(
                         textDirection: TextDirection.ltr,
                         child: AsyncButtonBuilder(
-                          loadingWidget: const CustomProgressIndicator(),
+                          loadingWidget: CustomProgressIndicator(
+                            color: Colors.white,
+                          ),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

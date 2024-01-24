@@ -69,16 +69,16 @@ appBar({String? title, bool showTabBar = false, tabBar, Function? onRefresh}) {
   );
 }
 
+// ignore: must_be_immutable
 class CustomProgressIndicator extends StatelessWidget {
-  const CustomProgressIndicator({
-    super.key,
-  });
+  Color? color;
+  CustomProgressIndicator({super.key, this.color});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: CircularProgressIndicator(
-        color: primaryColor,
+        color: color ?? primaryColor,
       ),
     );
   }
@@ -214,7 +214,10 @@ class CustomDrawer extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
         decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.grey))),
+          border: Border(
+            bottom: BorderSide(color: Colors.grey),
+          ),
+        ),
         child: ListTile(
           leading: Icon(
             icon,
@@ -252,7 +255,7 @@ class CustomDrawer extends StatelessWidget {
               ),
               currentAccountPicture: const CircleAvatar(
                 backgroundImage: AssetImage(
-                  "assets/images/logo.png",
+                  "assets/images/police.png",
                 ),
               ),
               decoration: const BoxDecoration(color: primaryColor),

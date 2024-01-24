@@ -201,7 +201,7 @@ class _AllViolationsState extends State<AllViolations> {
                           : [];
                   if (snapshot.connectionState == ConnectionState.waiting &&
                       data.isEmpty) {
-                    return const CustomProgressIndicator();
+                    return  CustomProgressIndicator();
                   }
                   if (data.isNotEmpty) {
                     return ListView(
