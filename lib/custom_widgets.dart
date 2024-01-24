@@ -52,7 +52,7 @@ appBar({String? title, bool showTabBar = false, tabBar}) {
           if (value == 'change-password') {
             Get.toNamed('change-password');
           } else if (value == 'logout') {
-            sharedPreferences!.clear();
+            sharedPreferences!.remove('user');
             Get.offAllNamed('login');
           }
         },
@@ -80,6 +80,7 @@ class CustomProgressIndicator extends StatelessWidget {
 class CustomListTile extends StatelessWidget {
   final String title;
   String? subTitle;
+  final String image;
   bool canEdit;
   bool canDelete;
   final Function onTap;
@@ -89,6 +90,7 @@ class CustomListTile extends StatelessWidget {
     super.key,
     required this.title,
     this.subTitle,
+    required this.image,
     required this.onTap,
     required this.editFunction,
     required this.deleteFunction,
@@ -112,7 +114,7 @@ class CustomListTile extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.all(0),
         leading: Image.asset(
-          'assets/images/police.png',
+          image,
           fit: BoxFit.cover,
         ),
         trailing: canEdit || canDelete

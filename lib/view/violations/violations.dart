@@ -19,68 +19,77 @@ class _ViolationsState extends State<Violations> {
     super.initState();
   }
 
+  bool cached = true;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(title: 'عناوين المخالفات'),
-      drawer: const CustomDrawer(),
-      body: FutureBuilder(
-        future: API.get(path: 'violations'),
-        builder: (context, AsyncSnapshot snapshot) {
-          List data = snapshot.hasData && snapshot.data.containsKey('data')
-              ? snapshot.data['data']
-              : [];
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CustomProgressIndicator();
-          }
-          if (data.isNotEmpty) {
-            return ListView(
-              padding: const EdgeInsets.all(16),
-              children: List.generate(
-                data.length,
-                (index) {
-                  var violation = data[index];
-                  return CustomListTile(
-                    title: '${violation['title']}',
-                    canEdit: sessionUser!['permissions']
-                        .contains('تعديل عناوين المخالفات'),
-                    canDelete: sessionUser!['permissions']
-                        .contains('حذف عناوين المخالفات'),
-                    onTap: () => false,
-                    editFunction: () async {
-                      var result =
-                          await Get.toNamed('violation-edit', arguments: {
-                        'violation_id': violation['id'],
-                        'title': violation['title'],
-                      });
+    return RefreshIndicator(
+      onRefresh: () async {
+        await Future.delayed(const Duration(seconds: 2));
+        cached = false;
+        setState(() => cached);
+      },
+      child: Scaffold(
+        appBar: appBar(title: 'عناوين المخالفات'),
+        drawer: const CustomDrawer(),
+        body: FutureBuilder(
+          future: API.get(path: 'violations', cached: cached),
+          builder: (context, AsyncSnapshot snapshot) {
+            List data = snapshot.hasData && snapshot.data.containsKey('data')
+                ? snapshot.data['data']
+                : [];
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CustomProgressIndicator();
+            }
+            if (data.isNotEmpty) {
+              return ListView(
+                padding: const EdgeInsets.all(16),
+                children: List.generate(
+                  data.length,
+                  (index) {
+                    var violation = data[index];
+                    return CustomListTile(
+                      title: '${violation['title']}',
+                      image: 'assets/images/logo.png',
+                      canEdit: sessionUser!['permissions']
+                          .contains('تعديل عناوين المخالفات'),
+                      canDelete: sessionUser!['permissions']
+                          .contains('حذف عناوين المخالفات'),
+                      onTap: () => false,
+                      editFunction: () async {
+                        var result =
+                            await Get.toNamed('violation-edit', arguments: {
+                          'violation_id': violation['id'],
+                          'title': violation['title'],
+                        });
+                        if (result == 1) setState(() {});
+                      },
+                      deleteFunction: () async {
+                        // if (API.loading) const CustomProgressIndicator();
+                        await API.delete(path: 'violations/${violation['id']}');
+                        setState(() {});
+                      },
+                    );
+                  },
+                ),
+              );
+            }
+            return const SizedBox();
+          },
+        ),
+        floatingActionButton:
+            sessionUser!['permissions'].contains('اضافة عناوين المخالفات')
+                ? FloatingActionButton(
+                    onPressed: () async {
+                      var result = await Get.toNamed('violation-create');
                       if (result == 1) setState(() {});
                     },
-                    deleteFunction: () async {
-                      // if (API.loading) const CustomProgressIndicator();
-                      await API.delete(path: 'violations/${violation['id']}');
-                      setState(() {});
-                    },
-                  );
-                },
-              ),
-            );
-          }
-          return const SizedBox();
-        },
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  )
+                : null,
       ),
-      floatingActionButton:
-          sessionUser!['permissions'].contains('اضافة عناوين المخالفات')
-              ? FloatingActionButton(
-                  onPressed: () async {
-                    var result = await Get.toNamed('violation-create');
-                    if (result == 1) setState(() {});
-                  },
-                  child: const Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                )
-              : null,
     );
   }
 }

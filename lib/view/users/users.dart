@@ -19,17 +19,20 @@ class _UsersState extends State<Users> {
     super.initState();
   }
 
+  bool cached = true;
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
         await Future.delayed(const Duration(seconds: 2));
+        cached = false;
+        setState(() => cached);
       },
       child: Scaffold(
         appBar: appBar(title: 'الضباط'),
         drawer: const CustomDrawer(),
         body: FutureBuilder(
-          future: API.get(path: 'users', cached: true),
+          future: API.get(path: 'users', cached: cached),
           builder: (context, AsyncSnapshot snapshot) {
             List data = snapshot.hasData && snapshot.data.containsKey('data')
                 ? snapshot.data['data']
@@ -46,6 +49,7 @@ class _UsersState extends State<Users> {
                     var user = data[index];
                     return CustomListTile(
                       title: '${user['name']}',
+                      image: 'assets/images/police.png',
                       canEdit:
                           sessionUser!['permissions'].contains('تعديل الضباط'),
                       canDelete:

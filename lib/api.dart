@@ -10,12 +10,12 @@ class API {
     'Authorization': 'Bearer ${sessionUser!['token']}'
   };
   static bool loading = true;
-  static response({
-    response,
-    bool showDialog = true,
-    bool cached = false,
-    String? path,
-  }) {
+  static response(
+      {response, bool showDialog = true, bool cached = false, String? path}) {
+    if (!cached && ['users', 'violations'].contains('$path')) {
+      sharedPreferences!.setString('$path', response.body);
+    }
+    var body = jsonDecode(response.body);
     if (response.statusCode >= 500) {
       if (showDialog) {
         customDialog(
@@ -32,19 +32,6 @@ class API {
       }
     }
     // if (response.statusCode != 200) return {'status': response.statusCode};
-    //Data cached or reget
-    var body;
-    if (cached &&
-        response.statusCode == 200 &&
-        response.body.contains('data')) {
-      sharedPreferences!.setString('$path', response.body);
-      String? dataOfCached = sharedPreferences!.getString('$path');
-      if (dataOfCached != null && !cached) {
-        body = jsonDecode(dataOfCached);
-      } else {
-        body = jsonDecode(response.body);
-      }
-    }
 
     if (response.statusCode == 422) {
       String text = validationMsgs(response.body);
@@ -52,9 +39,9 @@ class API {
         customDialog(title: 'خطأ في البيانات المدخلة ', middleText: text);
       }
     }
-    if (body['status'] == 400) {
+    if (response.body.contains('status') && body['status'] == 400) {
       if (showDialog) customDialog(title: 'تنبيه', middleText: body['msg']);
-    } else if (body['status'] == 403) {
+    } else if (response.body.contains('status') && body['status'] == 403) {
       if (showDialog) customDialog(title: 'تنبيه', middleText: body['msg']);
     }
 
@@ -64,6 +51,10 @@ class API {
   static Future get(
       {String? path, bool showDialog = true, bool cached = false}) async {
     var url = Uri.parse('${API.url}/$path');
+    String? dataOfCached = sharedPreferences!.getString('$path');
+    if (cached) {
+      if (dataOfCached != null) return jsonDecode(dataOfCached);
+    }
     var response = await http.get(url, headers: headers);
     return API.response(
       response: response,

@@ -17,9 +17,10 @@ Future checkPermission(permission) async {
   //   return null;
   // }
   userInfo = sharedPreferences!.getString('user');
-  sessionUser = jsonDecode(userInfo);
-  if (!sessionUser!['permissions'].contains(permission)) {
-    return Get.back();
+  sessionUser = userInfo != null ? jsonDecode(userInfo) : {};
+  if (userInfo != null && !sessionUser!['permissions'].contains(permission)) {
+    sharedPreferences!.remove('user');
+    return Get.offAllNamed('login');
   }
   return null;
 }
