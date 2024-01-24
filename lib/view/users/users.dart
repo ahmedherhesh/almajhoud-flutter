@@ -90,7 +90,10 @@ class _UsersState extends State<Users> {
                 ? FloatingActionButton(
                     onPressed: () async {
                       var result = await Get.toNamed('user-create');
-                      if (result == 1) setState(() {});
+                      if (result == 1) {
+                        cached = false;
+                        setState(() {});
+                      }
                     },
                     child: const Icon(
                       Icons.add,

@@ -52,6 +52,7 @@ class API {
       {String? path, bool showDialog = true, bool cached = false}) async {
     var url = Uri.parse('${API.url}/$path');
     String? dataOfCached = sharedPreferences!.getString('$path');
+    print(cached);
     if (cached) {
       if (dataOfCached != null) return jsonDecode(dataOfCached);
     }

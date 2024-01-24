@@ -34,6 +34,11 @@ class _OfficerViolationsState extends State<OfficerViolations> {
     setState(() => violations);
   }
 
+  onRefresh() async {
+    cached = false;
+    setState(() => cached);
+  }
+
   @override
   void initState() {
     checkPermission('عرض مخالفات');
@@ -46,116 +51,122 @@ class _OfficerViolationsState extends State<OfficerViolations> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        await Future.delayed(const Duration(seconds: 2));
-        cached = false;
-        setState(() => cached);
+        onRefresh();
       },
       child: Scaffold(
-        appBar: appBar(title: args['title']),
+        appBar: appBar(
+          title: args['title'],
+          onRefresh: () async {
+            onRefresh();
+          },
+        ),
         body: Column(
           children: [
             Container(
               margin: const EdgeInsets.only(top: 30),
               padding: const EdgeInsets.only(right: 20, left: 20),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: DateTimeFormField(
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              hintStyle: TextStyle(color: Colors.black45),
-                              errorStyle: TextStyle(color: Colors.redAccent),
-                              border: OutlineInputBorder(),
-                              suffixIcon: Icon(Icons.event_note),
-                              labelText: 'من تاريخ',
+              height: 110,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            child: DateTimeFormField(
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.all(8),
+                                hintStyle: TextStyle(color: Colors.black45),
+                                errorStyle: TextStyle(color: Colors.redAccent),
+                                border: OutlineInputBorder(),
+                                suffixIcon: Icon(Icons.event_note),
+                                labelText: 'من تاريخ',
+                              ),
+                              mode: DateTimeFieldPickerMode.date,
+                              autovalidateMode: AutovalidateMode.always,
+                              onDateSelected: (DateTime value) {
+                                String val = "$value".split(' ')[0];
+                                request['from'] = val;
+                                setState(() => request);
+                              },
                             ),
-                            mode: DateTimeFieldPickerMode.date,
-                            autovalidateMode: AutovalidateMode.always,
-                            onDateSelected: (DateTime value) {
-                              String val = "$value".split(' ')[0];
-                              request['from'] = val;
-                              setState(() => request);
-                            },
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          child: DateTimeFormField(
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              hintStyle: TextStyle(color: Colors.black45),
-                              errorStyle: TextStyle(color: Colors.redAccent),
-                              border: OutlineInputBorder(),
-                              suffixIcon: Icon(Icons.event_note),
-                              labelText: 'إلى تاريخ',
+                        const SizedBox(width: 10),
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            child: DateTimeFormField(
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.all(8),
+                                hintStyle: TextStyle(color: Colors.black45),
+                                errorStyle: TextStyle(color: Colors.redAccent),
+                                border: OutlineInputBorder(),
+                                suffixIcon: Icon(Icons.event_note),
+                                labelText: 'إلى تاريخ',
+                              ),
+                              mode: DateTimeFieldPickerMode.date,
+                              autovalidateMode: AutovalidateMode.always,
+                              onDateSelected: (DateTime value) {
+                                String val = "$value".split(' ')[0];
+                                request['to'] = val;
+                                setState(() => request);
+                              },
                             ),
-                            mode: DateTimeFieldPickerMode.date,
-                            autovalidateMode: AutovalidateMode.always,
-                            onDateSelected: (DateTime value) {
-                              String val = "$value".split(' ')[0];
-                              request['to'] = val;
-                              setState(() => request);
-                            },
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  violations != null
-                      ? Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: CustomMultiSelect(
-                                title: 'المخالفات',
-                                items: List.generate(violations['data'].length,
-                                    (index) {
-                                  return MultiSelectItem(
-                                    violations['data'][index]['id'],
-                                    violations['data'][index]['title'],
-                                  );
-                                }),
-                                initialValue: initialValue,
-                                onConfirm: (results) {
-                                  initialValue = results;
-                                  request['inList'] = jsonEncode(results);
-                                  setState(() => request);
-                                },
+                      ],
+                    ),
+                    violations != null
+                        ? Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: CustomMultiSelect(
+                                  title: 'المخالفات',
+                                  items: List.generate(
+                                      violations['data'].length, (index) {
+                                    return MultiSelectItem(
+                                      violations['data'][index]['id'],
+                                      violations['data'][index]['title'],
+                                    );
+                                  }),
+                                  initialValue: initialValue,
+                                  onConfirm: (results) {
+                                    initialValue = results;
+                                    request['inList'] = jsonEncode(results);
+                                    setState(() => request);
+                                  },
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: CustomMultiSelect(
-                                title: 'المخالفات ما عدا',
-                                items: List.generate(violations['data'].length,
-                                    (index) {
-                                  return MultiSelectItem(
-                                    violations['data'][index]['id'],
-                                    violations['data'][index]['title'],
-                                  );
-                                }),
-                                initialValue: exceptInitialValue,
-                                onConfirm: (results) {
-                                  exceptInitialValue = results;
-                                  request['notInList'] = jsonEncode(results);
-                                  setState(() => request);
-                                },
-                              ),
-                            )
-                          ],
-                        )
-                      : const SizedBox()
-                ],
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: CustomMultiSelect(
+                                  title: 'المخالفات ما عدا',
+                                  items: List.generate(
+                                      violations['data'].length, (index) {
+                                    return MultiSelectItem(
+                                      violations['data'][index]['id'],
+                                      violations['data'][index]['title'],
+                                    );
+                                  }),
+                                  initialValue: exceptInitialValue,
+                                  onConfirm: (results) {
+                                    exceptInitialValue = results;
+                                    request['notInList'] = jsonEncode(results);
+                                    setState(() => request);
+                                  },
+                                ),
+                              )
+                            ],
+                          )
+                        : const SizedBox()
+                  ],
+                ),
               ),
             ),
             violations != null

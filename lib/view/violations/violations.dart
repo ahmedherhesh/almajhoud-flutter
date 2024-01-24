@@ -81,7 +81,10 @@ class _ViolationsState extends State<Violations> {
                 ? FloatingActionButton(
                     onPressed: () async {
                       var result = await Get.toNamed('violation-create');
-                      if (result == 1) setState(() {});
+                      if (result == 1) {
+                        cached = false;
+                        setState(() {});
+                      }
                     },
                     child: const Icon(
                       Icons.add,

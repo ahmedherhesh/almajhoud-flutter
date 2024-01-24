@@ -286,7 +286,7 @@ class _AllViolationsState extends State<AllViolations> {
             var file = File(path);
             var res = await get(
               Uri.parse(
-                  '$mainUrl/all-violations?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}&inUsers=${request['inUsers']}'),
+                  '$mainUrl/all-violations?from=${request['from']}&to=${request['to']}&inList=${request['inList']}&notInList=${request['notInList']}&inUsers=${request['inUsers']}&export=pdf'),
               headers: {'Authorization': 'Bearer ${sessionUser!['token']}'},
             );
             await file.writeAsBytes(res.bodyBytes);

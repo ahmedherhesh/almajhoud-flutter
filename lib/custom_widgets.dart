@@ -3,10 +3,9 @@ import 'package:flutter_almajhoud/colors.dart';
 import 'package:flutter_almajhoud/env.dart';
 import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-appBar({String? title, bool showTabBar = false, tabBar}) {
+appBar({String? title, bool showTabBar = false, tabBar, Function? onRefresh}) {
   return AppBar(
     iconTheme: const IconThemeData(
       color: Colors.white,
@@ -26,6 +25,15 @@ appBar({String? title, bool showTabBar = false, tabBar}) {
     shadowColor: shadowColor,
     backgroundColor: primaryColor,
     actions: [
+      IconButton(
+        onPressed: () {
+          // onRefresh!();
+        },
+        icon: const Icon(
+          Icons.refresh,
+          color: Colors.white,
+        ),
+      ),
       PopupMenuButton(
         iconSize: 30,
         iconColor: Colors.white,
