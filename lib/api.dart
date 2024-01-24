@@ -12,7 +12,7 @@ class API {
   static bool loading = true;
   static response(
       {response, bool showDialog = true, bool cached = false, String? path}) {
-    if (!cached && ['users', 'violations'].contains('$path')) {
+    if (['users', 'violations'].contains('$path')) {
       sharedPreferences!.setString('$path', response.body);
     }
     var body = jsonDecode(response.body);
