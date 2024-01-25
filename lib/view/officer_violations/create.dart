@@ -1,5 +1,4 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_almajhoud/api.dart';
@@ -30,9 +29,18 @@ class _CreateOfficerViolationState extends State<CreateOfficerViolation> {
   }
 
   bool cached = true;
-  onRefresh() async {
+  Future onRefresh() async {
     cached = false;
     setState(() => cached);
+  }
+
+  String? selectedValue;
+  final TextEditingController textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,11 +52,18 @@ class _CreateOfficerViolationState extends State<CreateOfficerViolation> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async {
-        onRefresh();
-      },
+      onRefresh: onRefresh,
       child: Scaffold(
-        appBar: appBar(title: 'تسجيل مخالفة'),
+        appBar: appBar(
+          title: 'تسجيل مخالفة',
+          refreshBtn: IconButton(
+            onPressed: onRefresh,
+            icon: const Icon(
+              Icons.refresh,
+              color: Colors.white,
+            ),
+          ),
+        ),
         body: Container(
           margin: const EdgeInsets.only(top: 10),
           padding: const EdgeInsets.all(10),
@@ -89,11 +104,52 @@ class _CreateOfficerViolationState extends State<CreateOfficerViolation> {
                               snapshot.hasData ? snapshot.data['data'] : [];
                           return DropdownButton2(
                             hint: const Text('اختر نوع المخالفة'),
-                            // dropdownSearchData: DropdownSearchData(
-                            //   searchMatchFn: (items, val) {
-                            //     return true;
-                            //   },
-                            // ),
+                            dropdownSearchData: DropdownSearchData(
+                              searchController: textEditingController,
+                              searchInnerWidgetHeight: 50,
+                              searchInnerWidget: Container(
+                                height: 50,
+                                padding: const EdgeInsets.only(
+                                  top: 8,
+                                  bottom: 4,
+                                  right: 8,
+                                  left: 8,
+                                ),
+                                child: TextFormField(
+                                  expands: true,
+                                  maxLines: null,
+                                  controller: textEditingController,
+                                  decoration: InputDecoration(
+                                    // isDense: true,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8,
+                                    ),
+                                    hintText: 'بحث',
+                                    hintStyle: const TextStyle(fontSize: 16),
+                                    border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 1,
+                                        style: BorderStyle.solid,
+                                        color: Colors.transparent,
+                                      ),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              searchMatchFn: (item, searchValue) {
+                                return item.child
+                                    .toString()
+                                    .contains(searchValue);
+                              },
+                            ),
+                            //This to clear the search value when you close the menu
+                            onMenuStateChange: (isOpen) {
+                              if (!isOpen) {
+                                textEditingController.clear();
+                              }
+                            },
                             items: List.generate(
                               data.length,
                               (index) {

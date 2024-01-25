@@ -34,7 +34,7 @@ class _OfficerViolationsState extends State<OfficerViolations> {
     setState(() => violations);
   }
 
-  onRefresh() async {
+  Future onRefresh() async {
     cached = false;
     setState(() => cached);
   }
@@ -50,15 +50,17 @@ class _OfficerViolationsState extends State<OfficerViolations> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async {
-        onRefresh();
-      },
+      onRefresh: onRefresh,
       child: Scaffold(
         appBar: appBar(
           title: args['title'] ?? sessionUser!['name'],
-          onRefresh: () async {
-            onRefresh();
-          },
+          refreshBtn: IconButton(
+            onPressed: onRefresh,
+            icon: const Icon(
+              Icons.refresh,
+              color: Colors.white,
+            ),
+          ),
         ),
         body: Column(
           children: [

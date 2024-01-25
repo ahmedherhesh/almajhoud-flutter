@@ -10,6 +10,7 @@ import 'package:flutter_almajhoud/functions.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+// import 'package:permission_handler/permission_handler.dart';
 
 class AllViolations extends StatefulWidget {
   const AllViolations({super.key});
@@ -35,6 +36,11 @@ class _AllViolationsState extends State<AllViolations> {
     setState(() => violations);
   }
 
+  Future onRefresh() async {
+    cached = false;
+    setState(() => cached);
+  }
+
   @override
   void initState() {
     getUsers();
@@ -46,13 +52,18 @@ class _AllViolationsState extends State<AllViolations> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: () async {
-        await Future.delayed(const Duration(seconds: 2));
-        cached = false;
-        setState(() => cached);
-      },
+      onRefresh: onRefresh,
       child: Scaffold(
-        appBar: appBar(title: args['title']),
+        appBar: appBar(
+          title: args['title'],
+          refreshBtn: IconButton(
+            onPressed: onRefresh,
+            icon: const Icon(
+              Icons.refresh,
+              color: Colors.white,
+            ),
+          ),
+        ),
         body: Column(
           children: [
             Container(
@@ -201,7 +212,7 @@ class _AllViolationsState extends State<AllViolations> {
                           : [];
                   if (snapshot.connectionState == ConnectionState.waiting &&
                       data.isEmpty) {
-                    return  CustomProgressIndicator();
+                    return CustomProgressIndicator();
                   }
                   if (data.isNotEmpty) {
                     return ListView(
