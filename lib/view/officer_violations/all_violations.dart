@@ -24,6 +24,7 @@ class _AllViolationsState extends State<AllViolations> {
   Map request = {'from': '', 'to': ''};
   List initialValue = [];
   List exceptInitialValue = [];
+  List usersInitialValue = [];
   dynamic violations, users;
   bool cached = true;
   void getUsers() async {
@@ -184,9 +185,9 @@ class _AllViolationsState extends State<AllViolations> {
                                       );
                                     },
                                   ),
-                                  initialValue: exceptInitialValue,
+                                  initialValue: usersInitialValue,
                                   onConfirm: (results) {
-                                    exceptInitialValue = results;
+                                    usersInitialValue = results;
                                     request['inUsers'] = jsonEncode(results);
                                     setState(() => request);
                                   },

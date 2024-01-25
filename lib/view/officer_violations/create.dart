@@ -73,6 +73,7 @@ class _CreateOfficerViolationState extends State<CreateOfficerViolation> {
             children: [
               Container(
                 padding: const EdgeInsets.all(20),
+                clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                   border: Border.all(color: primaryColor),
                   color: Colors.white,
@@ -82,21 +83,6 @@ class _CreateOfficerViolationState extends State<CreateOfficerViolation> {
                   key: formState,
                   child: Column(
                     children: [
-                      // DropdownButton2(hint: const Text('اختر نوع المخالفة'),
-                      //       items: List.generate(
-                      //         data.length,
-                      //         (index) {
-                      //           var el = data[index];
-                      //           return DropdownMenuItem(
-                      //             alignment: Alignment.center,
-                      //             value: '${el['id']}',
-                      //             child: Text('${el['title']}'),
-                      //           );
-                      //         },
-                      //       ),
-                      //       onChanged: (val) {
-                      //         request['violation_id'] = val.toString();
-                      //       },),
                       FutureBuilder(
                         future: API.get(path: 'violations', cached: cached),
                         builder: (context, AsyncSnapshot snapshot) {
@@ -128,7 +114,7 @@ class _CreateOfficerViolationState extends State<CreateOfficerViolation> {
                                     hintText: 'بحث',
                                     hintStyle: const TextStyle(fontSize: 16),
                                     border: OutlineInputBorder(
-                                      borderSide: BorderSide(
+                                      borderSide: const BorderSide(
                                         width: 1,
                                         style: BorderStyle.solid,
                                         color: Colors.transparent,
